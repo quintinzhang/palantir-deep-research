@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALANTÍR · 深度研究档案 —— 一家把企业数据变成决策的软件公司</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg-2:#0d1219;
+  --bg-3:#111826;
+  --panel:#0f1520;
+  --panel-2:#131b29;
+  --ink:#e9e4d6;
+  --ink-2:#c4beae;
+  --ink-3:#8d8a7d;
+  --ink-4:#615f55;
+  --amber:#e8a33d;
+  --amber-2:#f5c66b;
+  --amber-dim:rgba(232,163,61,.14);
+  --cyan:#5fb3b3;
+  --cyan-dim:rgba(95,179,179,.14);
+  --red:#c96a5a;
+  --line:#232b3a;
+  --line-2:#2d3749;
+  --serif:"Noto Serif SC","Songti SC",serif;
+  --sans:"Noto Sans SC","PingFang SC",sans-serif;
+  --mono:"JetBrains Mono","SF Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.95;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--amber);color:#0a0e14}
+
+/* ===== 顶部阅读进度 ===== */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:1000;background:transparent}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--amber-2));box-shadow:0 0 12px rgba(232,163,61,.6)}
+.readpct{position:fixed;right:18px;bottom:16px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--ink-3);z-index:1000;background:rgba(13,18,25,.85);border:1px solid var(--line);padding:4px 9px;border-radius:3px;backdrop-filter:blur(6px)}
+
+/* ===== 布局 ===== */
+.layout{max-width:1240px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:72px}
+main{min-width:0;padding-bottom:140px}
+@media(max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  aside.toc{display:none}
+  .toc-mobile{display:flex}
+}
+.toc-mobile{display:none;position:sticky;top:0;z-index:900;background:rgba(10,14,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto;padding:12px 20px;gap:8px;white-space:nowrap;scrollbar-width:none}
+.toc-mobile::-webkit-scrollbar{display:none}
+.toc-mobile a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-3);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:5px 14px;flex:0 0 auto}
+.toc-mobile a.on,.toc-mobile a:hover{color:var(--amber);border-color:var(--amber-dim)}
+
+/* ===== 侧栏目录 ===== */
+aside.toc{position:sticky;top:0;align-self:start;height:100vh;padding:56px 0;display:flex;flex-direction:column;gap:4px;overflow-y:auto;scrollbar-width:none}
+aside.toc::-webkit-scrollbar{display:none}
+.toc-head{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--ink-4);margin-bottom:18px;text-transform:uppercase}
+aside.toc a{display:block;font-family:var(--sans);font-weight:400;font-size:13px;color:var(--ink-3);text-decoration:none;padding:7px 0 7px 16px;border-left:1px solid var(--line);transition:all .25s;line-height:1.5}
+aside.toc a .no{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-right:8px}
+aside.toc a:hover{color:var(--ink)}
+aside.toc a.on{color:var(--amber);border-left:1px solid var(--amber)}
+.toc-foot{margin-top:auto;padding-top:24px;font-family:var(--mono);font-size:9px;color:var(--ink-4);letter-spacing:.1em;line-height:2}
+
+/* ===== 档案封面 ===== */
+.cover{padding:72px 0 56px;position:relative}
+.cover-class{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.32em;color:var(--cyan);border:1px solid rgba(95,179,179,.3);padding:7px 16px;margin-bottom:36px}
+.cover-class::before{content:"";width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:blink 2.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.cover h1{font-size:clamp(52px,8vw,104px);font-weight:900;line-height:1.02;letter-spacing:.01em}
+.cover h1 .accent{color:var(--amber)}
+.cover .sub{font-size:clamp(17px,2.2vw,22px);color:var(--ink-2);font-weight:600;margin-top:22px;line-height:1.7}
+.cover .lede{font-size:15px;color:var(--ink-3);margin-top:14px;font-family:var(--sans);font-weight:300;max-width:620px;line-height:2}
+.cover-meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:42px;padding-top:26px;border-top:1px solid var(--line)}
+.cover-meta div{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-3);line-height:1.9}
+.cover-meta b{display:block;color:var(--ink-2);font-weight:400;font-size:13px}
+.cover-meta span{color:var(--amber)}
+
+/* 雷达 */
+.radar-wrap{margin:26px 0 8px;position:relative}
+.radar-wrap svg{display:block;width:100%;height:auto}
+@keyframes sweep{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes blip{0%,12%{opacity:1}45%{opacity:0}100%{opacity:0}}
+.radar-sweep{transform-origin:300px 170px;animation:sweep 9s linear infinite}
+.blip{animation:blip 9s infinite}
+.stamp{position:absolute;right:0;top:-6px;width:118px;height:118px;opacity:.9}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.stamp .ring-text{animation:spin 36s linear infinite;transform-origin:50% 50%}
+
+/* ===== 章节通用 ===== */
+section.ch{padding:88px 0 8px}
+.sec-head{margin-bottom:44px;position:relative}
+.sec-no{font-family:var(--mono);font-size:11px;letter-spacing:.4em;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.sec-no::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--amber-dim),transparent)}
+.sec-head h2{font-size:clamp(30px,4vw,44px);font-weight:900;line-height:1.3}
+.sec-head .desc{font-family:var(--sans);font-weight:300;color:var(--ink-3);font-size:14px;margin-top:12px;letter-spacing:.04em}
+h3{font-size:21px;font-weight:700;margin:56px 0 18px;display:flex;align-items:baseline;gap:12px}
+h3 .mono{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.2em;font-weight:400}
+h4{font-size:17px;font-weight:700;margin:34px 0 12px;color:var(--amber-2)}
+p{margin:0 0 22px;color:var(--ink-2)}
+p b,strong{color:var(--ink);font-weight:700}
+em{font-style:normal;color:var(--amber-2)}
+.parafx{position:relative}
+.pull{margin:44px 0;padding:6px 0 6px 30px;border-left:2px solid var(--amber);font-size:20px;line-height:2;color:var(--ink);font-weight:600}
+.pull small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.2em;margin-top:10px;font-weight:400}
+.note{font-family:var(--sans);font-size:13.5px;color:var(--ink-3);background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--cyan);padding:16px 20px;margin:26px 0;line-height:2}
+.note b{color:var(--cyan)}
+.src{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.02em}
+.redacted{background:#1c2330;color:transparent;border-radius:2px;padding:0 6px;cursor:help;user-select:none;transition:all .3s;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.redacted:hover,.redacted:active{color:var(--red);background:rgba(201,106,90,.12)}
+
+/* 图解 */
+figure.fig{margin:40px 0;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden;position:relative}
+figure.fig::before{content:"FIG.";position:absolute;top:14px;left:16px;font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--ink-4);z-index:2}
+.fig-scroll{overflow-x:auto;padding:34px 20px 18px;scrollbar-width:thin}
+.fig-scroll svg{display:block;min-width:700px;margin:0 auto;max-width:100%;height:auto}
+figure.fig figcaption{padding:14px 22px 18px;border-top:1px solid var(--line);font-family:var(--sans);font-size:13px;color:var(--ink-3);line-height:1.9}
+figure.fig figcaption b{color:var(--ink-2)}
+svg text{font-family:var(--sans)}
+svg .mono{font-family:var(--mono)}
+
+/* 摘要卡 */
+.tldr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:34px 0 10px}
+.tldr-grid .cell{background:var(--panel);padding:22px 22px 20px}
+.tldr-grid .k{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--amber);margin-bottom:12px}
+.tldr-grid .v{font-size:15px;line-height:1.9;color:var(--ink-2)}
+.tldr-grid .v b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin:36px 0}
+.kpi{border:1px solid var(--line);background:var(--panel);padding:18px 20px;border-radius:5px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--amber),transparent)}
+.kpi .n{font-family:var(--mono);font-size:26px;color:var(--amber-2);font-weight:600;letter-spacing:-.02em}
+.kpi .l{font-family:var(--sans);font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.7}
+
+/* 时间轴 */
+.timeline{position:relative;margin:46px 0 20px;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg,var(--amber-dim),var(--line) 70%,transparent)}
+.t-item{position:relative;padding:0 0 36px}
+.t-item::before{content:"";position:absolute;left:-31px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--bg);border:1.5px solid var(--amber);box-shadow:0 0 8px rgba(232,163,61,.5)}
+.t-item:hover::before{background:var(--amber)}
+.t-item .yr{font-family:var(--mono);font-size:13px;color:var(--amber);letter-spacing:.12em;font-weight:600}
+.t-item h5{font-size:16.5px;font-weight:700;color:var(--ink);margin:6px 0 8px}
+.t-item p{font-size:14.5px;font-family:var(--sans);font-weight:300;color:var(--ink-3);line-height:2;margin:0}
+
+/* 幕标题 */
+.act{margin:76px 0 30px;position:relative;padding-top:34px;border-top:1px solid var(--line)}
+.act .no{font-family:var(--mono);font-size:11px;letter-spacing:.5em;color:var(--cyan);margin-bottom:12px}
+.act h3{font-size:clamp(22px,3vw,30px);margin:0;font-weight:900;display:block}
+.act .when{font-family:var(--mono);font-size:11px;color:var(--ink-4);letter-spacing:.15em;margin-top:10px}
+
+/* 表格 */
+.tbl-wrap{overflow-x:auto;margin:30px 0;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--amber);text-align:left;padding:14px 18px;border-bottom:1px solid var(--line-2);background:var(--panel-2);font-weight:400;white-space:nowrap}
+td{padding:15px 18px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top;line-height:1.9;font-family:var(--sans);font-weight:300}
+tr:last-child td{border-bottom:none}
+td b{color:var(--ink);font-weight:500}
+td.rowlab{font-family:var(--sans);font-weight:500;color:var(--ink);white-space:nowrap;background:rgba(255,255,255,.015)}
+
+/* 列表 */
+ul.pts,ol.pts{margin:0 0 24px;padding-left:0;list-style:none;counter-reset:pt}
+ol.pts{counter-reset:pt}
+ul.pts li,ol.pts li{position:relative;padding:0 0 18px 40px;color:var(--ink-2);line-height:2}
+ul.pts li::before{content:"▸";position:absolute;left:12px;color:var(--amber);font-size:14px;top:1px}
+ol.pts li{counter-increment:pt}
+ol.pts li::before{content:counter(pt,decimal-leading-zero);position:absolute;left:0;top:3px;color:var(--amber);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
+ul.pts li b,ol.pts li b{color:var(--ink)}
+.career-card{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--amber);padding:24px 26px;margin:20px 0;border-radius:0 5px 5px 0}
+.career-card .t{font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px}
+.career-card .t .mono{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.2em;margin-right:10px;font-weight:400}
+.career-card p{font-size:14.5px;font-family:var(--sans);font-weight:300;color:var(--ink-3);margin:0;line-height:2}
+.career-card p b{color:var(--ink-2);font-weight:500}
+
+/* 结尾 */
+.endmark{margin-top:90px;padding-top:40px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.25em;text-align:center;line-height:3}
+a{color:var(--amber);text-decoration:none;border-bottom:1px solid var(--amber-dim);transition:all .2s}
+a:hover{color:var(--amber-2);border-bottom-color:var(--amber-2)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.reveal.vis{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .radar-sweep,.blip,.stamp .ring-text,.cover-class::before{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="progress"><i id="pbar"></i></div>
+<div class="readpct" id="rpct">00%</div>
+
+<nav class="toc-mobile" id="tocm">
+  <a href="#tldr">00 摘要</a><a href="#s1">01 发展史</a><a href="#s2">02 方法论</a><a href="#s3">03 Ontology</a><a href="#s4">04 数据梳理</a><a href="#s5">05 竞争</a><a href="#s6">06 壁垒</a><a href="#s7">07 交汇</a><a href="#s8">08 职业启发</a><a href="#s9">09 信源</a>
+</nav>
+
+<div class="layout">
+<aside class="toc" id="toc">
+  <div class="toc-head">// INDEX · 研究目录</div>
+  <a href="#tldr"><span class="no">00</span>执行摘要</a>
+  <a href="#s1"><span class="no">01</span>纵向 · 五幕发展史</a>
+  <a href="#s2"><span class="no">02</span>核心方法论</a>
+  <a href="#s3"><span class="no">03</span>Ontology 图解</a>
+  <a href="#s4"><span class="no">04</span>它如何梳理客户数据</a>
+  <a href="#s5"><span class="no">05</span>横向 · 竞争格局</a>
+  <a href="#s6"><span class="no">06</span>第一性原理 · 壁垒</a>
+  <a href="#s7"><span class="no">07</span>横纵交汇 · 判断</a>
+  <a href="#s8"><span class="no">08</span>职业发展启发</a>
+  <a href="#s9"><span class="no">09</span>信源与说明</a>
+  <div class="toc-foot">DOSSIER PLTR-2003<br>COMPILED 2026-08<br>横纵分析法 · v1.0</div>
+</aside>
+
+<main>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<header class="cover">
+  <div class="cover-class">RESEARCH DOSSIER · 深度研究档案 · 2026-08</div>
+  <h1>PALANT<span class="accent">Í</span>R<br>帕兰提尔</h1>
+  <div class="sub">一家把企业数据变成决策的软件公司 —— 以及它留给每个技术人的启示</div>
+  <div class="lede">它给情报机构抓过恐怖分子，给移民局追过非法移民，给英国卫生部搭过新冠平台，给乌克兰军队融合过战场数据，然后在 AI 时代成为市值一度逼近半个万亿美元的「企业 AI 操作系统」。这份档案用横纵分析法拆解：它怎么长起来的、Ontology 到底是什么、壁垒在哪、与你我何干。</div>
+
+  <div class="radar-wrap reveal">
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="雷达扫描示意图">
+      <defs>
+        <linearGradient id="swp" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#e8a33d" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#e8a33d" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="rglow" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#5fb3b3" stop-opacity=".10"/>
+          <stop offset="1" stop-color="#5fb3b3" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- 之眼意象 -->
+      <path d="M120,170 Q300,60 480,170 Q300,280 120,170 Z" fill="none" stroke="#2d3749" stroke-width="1"/>
+      <circle cx="300" cy="170" r="96" fill="url(#rglow)" stroke="#232b3a"/>
+      <circle cx="300" cy="170" r="62" fill="none" stroke="#2d3749"/>
+      <circle cx="300" cy="170" r="34" fill="none" stroke="#3a4658"/>
+      <circle cx="300" cy="170" r="12" fill="none" stroke="#e8a33d" stroke-opacity=".8"/>
+      <circle cx="300" cy="170" r="3.5" fill="#e8a33d"/>
+      <line x1="300" y1="66" x2="300" y2="274" stroke="#232b3a"/>
+      <line x1="196" y1="170" x2="404" y2="170" stroke="#232b3a"/>
+      <line x1="226" y1="96" x2="374" y2="244" stroke="#232b3a" stroke-dasharray="3 5"/>
+      <line x1="374" y1="96" x2="226" y2="244" stroke="#232b3a" stroke-dasharray="3 5"/>
+      <!-- 扫描扇形 -->
+      <g class="radar-sweep">
+        <path d="M300,170 L300,58 A112,112 0 0,1 388,102 Z" fill="url(#swp)"/>
+        <line x1="300" y1="170" x2="300" y2="58" stroke="#e8a33d" stroke-width="1.2" stroke-opacity=".8"/>
+      </g>
+      <!-- blips：数据点被连接 -->
+      <g class="blip" style="animation-delay:0s">
+        <circle cx="252" cy="132" r="3" fill="#5fb3b3"/>
+        <circle cx="252" cy="132" r="7" fill="none" stroke="#5fb3b3" stroke-opacity=".4"/>
+      </g>
+      <g class="blip" style="animation-delay:1.6s">
+        <circle cx="342" cy="146" r="3" fill="#5fb3b3"/>
+        <circle cx="342" cy="146" r="7" fill="none" stroke="#5fb3b3" stroke-opacity=".4"/>
+      </g>
+      <g class="blip" style="animation-delay:3.4s">
+        <circle cx="318" cy="216" r="3" fill="#5fb3b3"/>
+        <circle cx="318" cy="216" r="7" fill="none" stroke="#5fb3b3" stroke-opacity=".4"/>
+      </g>
+      <line x1="252" y1="132" x2="342" y2="146" stroke="#5fb3b3" stroke-opacity=".55" stroke-dasharray="2 3"/>
+      <line x1="342" y1="146" x2="318" y2="216" stroke="#5fb3b3" stroke-opacity=".55" stroke-dasharray="2 3"/>
+      <text x="120" y="316" class="mono" font-size="9" fill="#615f55" letter-spacing="2">CONNECT THE DOTS · 把点连起来，就是这家公司存在的全部理由</text>
+    </svg>
+    <svg class="stamp" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="56" fill="none" stroke="#c96a5a" stroke-opacity=".55" stroke-width="1.5"/>
+      <circle cx="60" cy="60" r="36" fill="none" stroke="#c96a5a" stroke-opacity=".4" stroke-width="1"/>
+      <g class="ring-text">
+        <defs><path id="circ" d="M60,12 a48,48 0 1,1 -0.01,0"/></defs>
+        <text font-size="9.5" fill="#c96a5a" fill-opacity=".75" class="mono" letter-spacing="3.2">
+          <textPath href="#circ">SEEING STONE · FOUNDED 2003 · PALO ALTO · NYSE: PLTR ·</textPath>
+        </text>
+      </g>
+      <text x="60" y="65" text-anchor="middle" font-size="13" fill="#c96a5a" class="mono" letter-spacing="1">档案</text>
+    </svg>
+  </div>
+
+  <div class="cover-meta reveal">
+    <div><span>EST.</span> <b>2003 年 5 月</b></div>
+    <div><span>HQ</span> <b>丹佛 / 硅谷起家</b></div>
+    <div><span>CEO</span> <b>Alex Karp</b></div>
+    <div><span>教父</span> <b>Peter Thiel</b></div>
+    <div><span>上市</span> <b>NYSE: PLTR · 2020.09</b></div>
+    <div><span>市值</span> <b>一度 ≈ $4000 亿（2025）</b></div>
+    <div><span>员工</span> <b>约 4,000–5,000 人</b></div>
+    <div><span>人均营收</span> <b>全球软件业第一档</b></div>
+  </div>
+</header>
+
+<!-- ══════════════ 00 摘要 ══════════════ -->
+<section class="ch" id="tldr">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 00 / EXECUTIVE BRIEF</div>
+    <h2>执行摘要</h2>
+    <div class="desc">如果你只有三分钟，读这里。</div>
+  </div>
+
+  <div class="tldr-grid reveal">
+    <div class="cell"><div class="k">它解决什么问题</div><div class="v">大组织的数据散落在几百个互不相通的 system 里，<b>看得见数据，做不了决策</b>。Palantir 把这些数据拼成一张「活的企业地图」，并让软件直接驱动行动。</div></div>
+    <div class="cell"><div class="k">核心方法论</div><div class="v"><b>本体（Ontology）</b>：不按数据库表组织数据，而按真实世界的对象（工厂、订单、病人、卡车）及其关系组织。<b>前置部署工程师（FDE）</b>：工程师驻场，像特种部队一样贴身交付。</div></div>
+    <div class="cell"><div class="k">怎么赚钱</div><div class="v">不卖工具订阅那么简单——年费起步百万美元级，大客户合同数千万至上亿美元。先为结果负责，再产品化沉淀，<b>「咨询式获客、产品化交付」</b>。</div></div>
+    <div class="cell"><div class="k">为什么 AI 时代赢了</div><div class="v">LLM 是大脑，但大脑需要身体。Ontology 恰好是那个「身体」：让 AI 的每个动作都落在真实对象上、可审计、不越权。<b>AIP 把 20 年积累变成了 AI 时代的入场券</b>。</div></div>
+    <div class="cell"><div class="k">第一性壁垒</div><div class="v">不是算法，是<b>切换成本</b>：当一家公司的决策和日常运营跑在本体之上、并写回生产系统时，换掉 Palantir 等于换掉企业的神经系统。</div></div>
+    <div class="cell"><div class="k">对你的启发</div><div class="v">在 AI 让「写代码」贬值的时代，升值的是<b>领域建模能力、把决策闭环做完的能力、以及对业务上下文的垄断性理解</b>。做 FDE 型工程师，不做管道工。</div></div>
+  </div>
+
+  <div class="kpis reveal">
+    <div class="kpi"><div class="n">$1.09B</div><div class="l">2020 营收（上市当年）</div></div>
+    <div class="kpi"><div class="n">$2.87B</div><div class="l">2024 营收 · 同比 +29%</div></div>
+    <div class="kpi"><div class="n">$1B+</div><div class="l">2025 单季营收突破十亿美元</div></div>
+    <div class="kpi"><div class="n">+48%</div><div class="l">2025Q2 营收同比增速（再加速）</div></div>
+    <div class="kpi"><div class="n">~$400B</div><div class="l">2025 年市值峰值量级</div></div>
+    <div class="kpi"><div class="n">68</div><div class="l">Rule of 40（2024Q4，行业顶级）</div></div>
+  </div>
+
+  <p class="src reveal">注：用户拼写「plantir」应为 Palantir（帕兰提尔），名字取自《魔戒》中可千里窥视的「真知晶球」palantír——一块既能守望、也能被意志劫持的石头。这个名字后来被证明起得极有先见之明。<span class="src">[公司命名源自托尔金《指环王》，Thiel 是资深托尔金读者]</span></p>
+</section>
+
+<!-- ══════════════ 01 纵向发展史 ══════════════ -->
+<section class="ch" id="s1">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 01 / DIACHRONIC · 纵向分析</div>
+    <h2>五幕剧：一家「不性感」公司用二十年熬成 AI 时代底座</h2>
+    <div class="desc">沿时间轴还原 Palantir 从诞生到 2026 年的全貌。这不是年表，是一部有因果的剧。</div>
+  </div>
+
+  <!-- 第一幕 -->
+  <div class="act reveal">
+    <div class="no">ACT I · 起源</div>
+    <h3>一颗来自 PayPal 的种子，一场来自 9/11 的执念</h3>
+    <div class="when">2003 — 2008 · PALO ALTO</div>
+  </div>
+
+  <p class="reveal">要理解 Palantir，得先回到 2001 年的 PayPal。那时的 PayPal 正被有组织欺诈往死里打：盗刷团伙用成千上万个账户、代理服务器和盗来的信用卡，每天从平台抽走几十万美元。传统风控靠规则引擎，规则一改，欺诈者十分钟内就适应。PayPal 的反欺诈团队——由 Nathan Gettings 领衔的工程师——被逼出了一条完全不同的路：他们不盯单笔交易，而是把<b>账户、设备、IP、交易、地址</b>全部连成一张实时图谱，用算法在图上找团伙的结构性指纹。欺诈者可以换账户，但换不掉自己在图上留下的关系形状。</p>
+
+  <p class="reveal">这套系统救了 PayPal。而 Peter Thiel——PayPal 的联合创始人兼时任 CEO——从中得出的结论远比一次商业胜利更野心勃勃。他后来反复讲那个类比：PayPal 的反欺诈系统本质上<b>「是一家私营公司里的 CIA」</b>——它从海量噪音里实时找出隐匿的敌人。2001 年 9 月 11 日之后，这个类比有了残酷的现实注脚：9/11 委员会事后的调查发现，恐怖分子的线索散落在 CIA、FBI、移民局、航空公司的各自数据库里，<b>没有任何一个系统能把这些点连起来</b>。「connect the dots」成了那个年代对政府信息体系最痛的批评。而政府的应对是把预算砸向新的巨型数据库和层级更多的情报机构——在 Thiel 看来，这恰恰是南辕北辙：问题从来不是数据不够，而是数据互不相通、且没人在同一张图上看世界。</p>
+
+  <div class="pull reveal">PayPal 已经证明：把数据连成图，就能在开放网络里抓住隐匿的敌人。政府需要的是同一个东西，只是规模更大、权限更复杂。<small>— PALANTIR 的创始命题，本质上只有这一句话</small></div>
+
+  <p class="reveal">2003 年 5 月，Thiel 出资（前后投入约三千万美元自有资金），拉起了一家新公司。团队配置在今天看来像一次「PayPal 旧部重逢 + 学术怪才」的混编：Thiel 的斯坦福旧识、拥有法兰克福大学新古典社会理论博士学位和斯坦福法律学位的<b>Alex Karp</b> 出任 CEO——一个从未运营过科技公司、常年泡在欧洲哲学与人类学文献里的高个子；PayPal 反欺诈工程负责人 <b>Nathan Gettings</b>；后来创立 Addepar 的 <b>Joe Lonsdale</b>；和从斯坦福退学的 <b>Stephen Cohen</b>。公司取名 Palantir，取自《魔戒》里的真知晶球。Thiel 的判断是：这件事太贵、太慢、太敏感，风险资本看不懂也等不起，不如用自己的钱慢慢烧。</p>
+
+  <p class="reveal">接下来的五年，是硅谷几乎没人注意到、或注意到了就嘲笑的五年。没有产品、没有客户、没有营收，工程师们在 Palo Alto 的办公室里从零造一套前所未有的东西：一个能把任意数据源接进来、在细粒度权限控制下（谁能看哪个字段、哪条记录，全部可审计）做实体关系分析的情报工作台。2005 年前后，CIA 的风投机构 <b>In-Q-Tel</b> 投入约 200 万美元——这笔钱的意义不在金额，而在于「认证」：它向整个美国情报界发出了信号，这家公司通过了背景审查、值得被带进屋子。2008 年，第一个正式产品 <b>Gotham</b>（以蝙蝠侠的城市命名）发布，情报分析员们开始用它把「谁认识谁、谁给谁汇过钱、谁的电话打给了谁」画在同一张图上。</p>
+
+  <p class="reveal"><span class="src">[来源：Palantir 官方历史叙述；Thiel/Karp 多次公开访谈中对 PayPal 反欺诈与 9/11 动机的重复陈述；In-Q-Tel 投资为公开记录]</span></p>
+
+  <!-- 第二幕 -->
+  <div class="act reveal">
+    <div class="no">ACT II · 深耕与争议</div>
+    <h3>在没人愿意碰的市场里，长出别人没有的能力</h3>
+    <div class="when">2008 — 2016 · 华盛顿 · 巴尔地摩 · 无处又无处不在</div>
+  </div>
+
+  <p class="reveal">Gotham 在情报界和军方的渗透，走的不是传统军工销售的路——恰恰相反，是一条罕见「自下而上」的路。最富戏剧性的注脚是 2012 年前后著名的「<b>陆军备忘录事件</b>」：一线情报士兵们对陆军官方耗巨资建设的 DCGS-A 情报系统怨声载道，而他们在训练中用过的 Palantir 却顺手得多。一份由前线情报官起草的备忘录在军内流传，直白地要求「给我们 Palantir」，随后国会山有议员为此施压，陆军才不情愿地开出小规模试点。一家硅谷软件公司让陆军现役官兵集体「请愿」，这在美军采购史上几乎是孤例——但它精准展示了 Palantir 的获客哲学：<b>让真正干活的人先爱上工具，合同是果不是因</b>。</p>
+
+  <p class="reveal">同期，Palantir 把同一套技术卖进了华尔街（金融版产品 Metropolis），摩根大通等机构用它做反欺诈与风险图谱——也在这里第一次尝到「工程师能看穿一家银行所有数据」引发的合规惊恐（据报道，摩根大通后来收紧了 Palantir 工程师在行内的数据访问范围）。这个教训后来被反过来变成产品基因：<b>权限、审计、最小可见</b>成为 Gotham 与后来所有产品不可拆分的一部分。</p>
+
+  <p class="reveal">但这一幕真正的主旋律是争议。2014 年起，美国移民与海关执法局（ICE）成为 Palantir 的客户，Gotham 被用于移民案件调查与定位。2018 年「骨肉分离」政策把 ICE 推上风口浪尖，Palantir 作为其技术供应商随之被卷入：员工联名、硅谷舆论绞杀、 protestor 堵门。2019 年，部分员工公开 walkout 抗议 ICE 合同。Karp 的回应成为他个人品牌的永久注脚：他不道歉、不切割，公开表示为与美国政府合作感到骄傲，并在内部信里说，如果硅谷的价值观是不与政府合作，「那我们不是硅谷公司」。几乎同一时间（2018 年），Cambridge Analytica 挪用 Facebook 数据丑闻爆发，媒体顺藤摸瓜发现 CA 与 Palantir 人士有过接触<span class="src">[据 NYT 等报道，Palantir 否认存在官方层面的合作或数据交易，此事从未坐实为公司的正式行为]</span>，Thiel 恰好是 Facebook 董事会成员，公司声誉一度跌入谷底。</p>
+
+  <p class="reveal">站在 2026 年回看，2016–2019 年的 Palantir 像一个悖论：在硅谷声誉最差的时候，它的工程能力与政企信任却在最厚地积累。Karp 后来说过一句被反复引用的话——大意是：<b>我们做的很多最重要的事，恰恰是别人不愿意做、不敢做、做不了的事</b>。涉密资质、背景审查通过的工程师、对政府采购流程的肌肉记忆、对「脏乱差」遗留系统的忍耐力，这些在互联网行业一文不值的东西，在另一个世界千金难买。Palantir 用七八年时间买断了这道别人无法用钱快速买到的护城河。</p>
+
+  <p class="reveal"><span class="src">[来源：2012 年陆军内部备忘录经媒体公开报道（Digiday/Defense One 等）；ICE 合同公开记录；2018–2019 年 walkout 与 Karp 公开回应（CNBC/ internals 备忘录被曝光）；Cambridge Analytica 关联报道（NYT, 2018-03）]</span></p>
+
+  <!-- 第三幕 -->
+  <div class="act reveal">
+    <div class="no">ACT III · 商业化</div>
+    <h3>把「给政府的定制」翻译成「给企业的产品」</h3>
+    <div class="when">2016 — 2020 · Foundry 诞生 · 上市</div>
+  </div>
+
+  <p class="reveal">只做政府生意的天花板是清晰可见的：预算随政治周期波动、销售周期以年计、单一客户议价权过重。Palantir 必须打进商业市场。但直接把 Gotham 卖给宝洁是行不通的——企业不缺「情报工作台」，企业缺的是<b>一个能统一全家数据的地方</b>。2016 年，第二根支柱 <b>Foundry</b> 正式发布。它脱胎于为 bp 等早期商业客户做的深度项目：bp 这家在深水地平线事故后痛定思痛的能源巨头，把从油井、炼厂、油轮到加油站的整条价值链接入了 Foundry。此后空客用它统一全球供应链数据，丰田北美用它做零备件预测，菲亚特克莱斯勒用它排产，默克、温迪汉堡先后进场。</p>
+
+  <p class="reveal">Foundry 在商业上真正与众不同的点，不是又一个数据仓库或 BI 工具，而是 Palantir 坚持<b>「对结果负责」</b>：不是把软件授权给你、让你们 IT 部门自己折腾三年，而是把自己的工程师派进你的业务现场，直到某个真实的业务指标动了为止。这种模式重得吓人——毛利难看、难以规模化、被华尔街分析师集体嫌弃——但它解决了企业数据项目失败的头号原因：不是技术不行，而是没人对「最后一步」（把数据变成一线人员的日常动作）负责。</p>
+
+  <p class="reveal">2020 年，两件事把 Palantir 推到公众面前。第一件是疫情：英国 NHS 在 3 月疫情最凶时找到 Palantir，几周内搭起全国新冠数据平台，统一了检测、住院、床位、疫苗等数据流，支撑了后来的疫苗部署——这个以 1 英镑象征性合同起步的项目，后来因数据伦理争议被环保与隐私团体持续诉讼，但也成为 Foundry 能力的全球路演。第二件是上市：2020 年 9 月 30 日，Palantir 绕过传统 IPO，以直接上市方式登陆纽交所，代码 PLTR。当年营收 10.9 亿美元，其中政府贡献过半。</p>
+
+  <p class="reveal"><span class="src">[来源：Foundry 2016 年发布；bp/空客/丰田/FCA 均为 Palantir 公开披露客户；NHS COVID-19 Data Store（2020-03 起，£1 起步合同与后续争议为公开记录）；上市信息来自 SEC 文件]</span></p>
+
+  <!-- 第四幕 -->
+  <div class="act reveal">
+    <div class="no">ACT IV · 至暗与苦功</div>
+    <h3>股价跌去 87% 的两年里，它把自己改造成了 SaaS</h3>
+    <div class="when">2021 — 2023 春 · 被华尔街抛弃 · 被乌克兰需要</div>
+  </div>
+
+  <p class="reveal">上市即高光，高光即悬崖。2021 年初，散户与「 meme 股」热潮把 PLTR 推到 45 美元；随后三年不到，2022 年底股价最低跌到 6 美元附近，跌幅约 87%。原因叠着原因：增速从 40%+ 一路滑向 17%；美联储加息杀估值；大批股票解禁；还有一笔说不清的账——Palantir 曾投资过几家后来成为其客户的 SPAC 公司，「既是股东又是供应商」的循环让市场对其收入质量起疑。</p>
+
+  <p class="reveal">但在股价最惨的这两年，公司内部发生了三件当时少有人在意的事。其一，<b>Apollo</b> 成熟了：这是 Palantir 自用的「持续交付」系统，能在客户自己的云环境、甚至涉密网络里自动升级软件——它把过去动辄数月的现场部署，变成了接近 SaaS 的体验，这是「重模式」得以规模化的隐藏前提。其二，<b>本体（Ontology）</b>被从 Foundry 的内部机制提炼成明确的产品与对外叙事，配套的 Ontology SDK 让开发者能用代码直接操作业务对象。其三，2022 年 2 月俄乌战争爆发，乌克兰政府在开战数周内全面启用 Foundry 融合战场数据——从目标情报、人道物流到被掠夺资产的追踪，Karp 本人到访基辅。全世界军方第一次在直播级的战争里看到「数据操作系统」意味着什么。财务上，2022 年第四季度，Palantir 首次实现 GAAP 季度盈利。</p>
+
+  <div class="pull reveal">所有人都盯着股价的 87% 跌幅，没人注意到它正把二十年的脏活苦功，锻造成一件正好等在 AI 浪潮必经之路上的东西。<small>— ACT IV 的本质：市场错杀了它，但没有改变它</small></div>
+
+  <p class="reveal"><span class="src">[来源：股价为公开市场数据；Apollo 与 Ontology SDK 来自 Palantir 官方技术博客；乌克兰部署经 Karp 及乌方官员公开确认（2022 年起多次报道）；2022Q4 GAAP 盈利来自财报]</span></p>
+
+  <!-- 第五幕 -->
+  <div class="act reveal">
+    <div class="no">ACT V · 登基</div>
+    <h3>ChatGPT 炸响之后，全场只有它手里有「AI 的身体」</h3>
+    <div class="when">2023 — 2026 · AIP · 王座与新的敌人</div>
+  </div>
+
+  <p class="reveal">2022 年 11 月 30 日，OpenAI 发布 ChatGPT。之后的 2023 年，全世界的 CIO 都在问同一个问题：「大模型很强，但它怎么安全地用在我的数据上？」——让 LLM 直接读生产数据库？幻觉一条 SQL 就可能搞垮库存系统；让它自由访问全公司文档？保密协议先杀死你。企业 AI 的瓶颈瞬间从「模型不够聪明」变成了「模型没有可信赖地接入企业现实的接口」。</p>
+
+  <p class="reveal">而 Palantir 二十年只造了一件事，恰好就是这个接口。2023 年 4 月，<b>AIP（Artificial Intelligence Platform）</b>发布，逻辑极其简洁：LLM 是大脑，Ontology 是身体——模型的一切感知与行动都必须经过本体提供的类型化接口（读对象、走关系、触发 Action），每一步可审计、可回滚、受权限约束。用 Palantir 自己的话说：<b>「我们不担心模型写错代码，因为模型根本不碰代码，它只能操作本体里被明确定义过的业务对象。」</b>紧接着，公司发明了与其气质完全相符的销售动作——<b>AIP Bootcamp（速赢营）</b>：客户带着真实用例来，五天，从接入数据到跑出一个能用的 AI 工作流原型，不谈 PPT。这种「先给你看结果」的打法转化率高得惊人，美国商业收入增速从 2023 年的个位数，一路拉到 2024 年的 +54%、2025 年上半年的 +70% 至 +90% 区间。</p>
+
+  <p class="reveal">军事情节同步加冕：Project Maven——美军最重要的 AI 目标识别系统——由 Palantir 承建，合同上限 2024 年扩至 4.8 亿美元、2025 年再扩至约 10 亿美元；2024 年 3 月又拿下陆军 TITAN 智能地面站 1.78 亿美元订单；2025 年 4 月，<b>NATO 通过其采购局直接采购 Palantir 的 Maven 系统</b>，用于盟军司令部——一个成员国联盟把作战数据中枢交给一家商业公司，这在十年前是不可想象的。资本市场随后补完了仪式：2024 年 9 月纳入 S&P 500，12 月纳入纳斯达克 100，全年股价上涨约 340%，成为当年美股大盘最强音之一；2025 年，营收单季突破 10 亿美元、全年奔向 40 亿量级，市值一度站上约 4000 亿美元——以不到 5000 名员工。同期它还与昔日「宿敌」Databricks 宣布了互操作性合作（2025 年 3 月），从你死我活转向竞合：<b>湖仓在底下，本体在上面</b>。</p>
+
+  <p class="reveal">到 2026 年的今天，「Palantir 是不是被高估了」仍是市场分歧最大问题（按几乎任何传统估值尺度，它都贵得离谱）；但「它是不是企业 AI 落地里最完整的答案」——越来越多公司的钱包已经投了票。Karp 在 2024 年出版的《The Technological Republic》里把公司的野心说破了：西方的软件 industry 离开了它的国防根源，而 Palantir 要把它们重新焊在一起。争议从未离开这家公司——隐私团体、欧洲左翼媒体、甚至 AI 安全阵营对它的批评一浪接一浪——但有一个事实争议双方都认：<b>它确实把「让软件替组织做决定并行动」这件事，从演示稿变成了生产线。</b></p>
+
+  <p class="reveal"><span class="src">[来源：AIP 2023-04 发布与 Bootcamp 模式（官方博客/财报电话会）；Maven 合同上限扩展与 NATO 采购（DoD 公告与 NSPA，2024–2025）；TITAN（美陆军，2024-03）；指数纳入（2024）；财务数据来自历季财报；Databricks 合作（2025-03 双方公告）；《The Technological Republic》(Karp, 2024)]</span></p>
+
+  <!-- 时间轴 -->
+  <h3 class="reveal"><span class="mono">TIMELINE</span>二十三年，十四个节点</h3>
+  <div class="timeline reveal">
+    <div class="t-item"><div class="yr">2003.05</div><h5>成立</h5><p>Thiel 自掏约 $30M，与 Karp、Gettings、Lonsdale、Cohen 在 Palo Alto 创立。命名取自《魔戒》真知晶球。</p></div>
+    <div class="t-item"><div class="yr">2005</div><h5>In-Q-Tel 入股</h5><p>CIA 风投约 $2M 投入。金额不大，等于情报界的「准入认证」。</p></div>
+    <div class="t-item"><div class="yr">2008</div><h5>Gotham 发布</h5><p>面向情报/国防的实体关系分析工作台：细粒度权限 + 全审计 + 图分析。此后数年在情报界与军方渗透。</p></div>
+    <div class="t-item"><div class="yr">2012</div><h5>「给我们 Palantir」备忘录</h5><p>一线情报兵抗议官方 DCGS-A 系统、联名要求配发 Palantir，议员施压后陆军开出试点。教科书级的自下而上采用。</p></div>
+    <div class="t-item"><div class="yr">2014</div><h5>ICE 合同</h5><p>Gotham 进入移民执法。争议的种子埋下，四年后随「骨肉分离」政策全面爆发。</p></div>
+    <div class="t-item"><div class="yr">2016</div><h5>Foundry 发布</h5><p>从服务 bp 等客户的项目中脱胎的「企业数据操作系统」。商业化元年开始。</p></div>
+    <div class="t-item"><div class="yr">2018–19</div><h5>声誉谷底</h5><p>Cambridge Analytica 风波波及、员工为 ICE 合同 walkout、估值从 $20B 一路下修。Karp 拒绝切割政府客户。</p></div>
+    <div class="t-item"><div class="yr">2020.03</div><h5>NHS 新冠平台</h5><p>数周内为英国搭起全国 COVID 数据平台，从 £1 象征合同起步，后成为疫苗部署的数据底座（也引来持续隐私诉讼）。</p></div>
+    <div class="t-item"><div class="yr">2020.09</div><h5>直接上市</h5><p>NYSE: PLTR。当年营收 $1.09B，政府占过半。</p></div>
+    <div class="t-item"><div class="yr">2022</div><h5>至暗与转折</h5><p>股价从 $45 跌到 $6（-87%）；同期乌克兰启用 Foundry 打数据仗，Q4 首次 GAAP 季度盈利。</p></div>
+    <div class="t-item"><div class="yr">2023.04</div><h5>AIP 发布</h5><p>LLM × Ontology。随后 AIP Bootcamp 五天速赢营开打，美国商业增速由负转正、一路狂飙。</p></div>
+    <div class="t-item"><div class="yr">2024</div><h5>进入 S&P 500 / Nasdaq-100</h5><p>营收 $2.87B（+29%），GAAP 净利 $462M，全年股价约 +340%。Maven 上限扩至 $480M，TITAN 落地。</p></div>
+    <div class="t-item"><div class="yr">2025</div><h5>登顶「AI 应用层之王」叙事</h5><p>NATO 经 NSPA 采购 Maven；Maven 上限扩至 ~$1B；单季营收破 $1B；市值一度 ≈ $400B；与 Databricks 宣布互操作。</p></div>
+    <div class="t-item"><div class="yr">2026 · 今</div><h5>叙事确立，争论继续</h5><p>「企业 AI 操作系统」位置坐实；估值是否透支十年未来，成为多空最分裂的问题。壁垒与争议同步变厚。</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ 02 核心方法论 ══════════════ -->
+<section class="ch" id="s2">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 02 / METHODOLOGY · 方法论</div>
+    <h2>核心方法论：本体是它的「世界观」，FDE 是它的「四肢」</h2>
+    <div class="desc">Palantir 真正的方法论只有一句话：让软件对业务结果负责，而不只是对功能负责。</div>
+  </div>
+
+  <p class="reveal">先把产品线摆清楚（它们其实是同一套方法论在不同市场的投影）：</p>
+
+  <div class="tbl-wrap reveal"><table>
+    <tr><th>产品</th><th>发布</th><th>面向</th><th>一句话定位</th></tr>
+    <tr><td><b>Gotham</b></td><td class="mono">2008</td><td>政府 / 情报 / 军方</td><td>把「谁、什么、何时、何地」连成一张可行动的情报图</td></tr>
+    <tr><td><b>Metropolis</b></td><td class="mono">~2010</td><td>金融</td><td>量化与风险图谱（后逐步并入 Foundry 体系）</td></tr>
+    <tr><td><b>Foundry</b></td><td class="mono">2016</td><td>商业企业</td><td>企业数据操作系统：接入—治理—本体—应用一体</td></tr>
+    <tr><td><b>Apollo</b></td><td class="mono">持续演进</td><td>自身交付基建</td><td>持续交付系统：在客户云/涉密网里自动升级一切</td></tr>
+    <tr><td><b>AIP</b></td><td class="mono">2023</td><td>所有客户</td><td>把 LLM/Agent 安全接到本体上，让 AI 替组织行动</td></tr>
+  </table></div>
+
+  <h3 class="reveal"><span class="mono">02.1</span>前置部署工程师（FDE）：一支住在客户现场的产品军队</h3>
+
+  <p class="reveal">「Forward Deployed Engineer」是个军用词——forward-deployed 指前沿部署的部队。Palantir 把它变成了一个职业：工程师长期驻扎在客户的油田、工厂、战区指挥所和医院里，与业务人员同吃同住，直到业务指标真正动了才撤。这不是外包、不是驻场运维，而是一种被 Shyam Sankar（公司 CTO）称为<b>「软件的特种作战」</b>的模式：产品部队小、精、快，直接对着战场地形（客户的真实业务）写代码。</p>
+
+  <p class="reveal">反常规之处在于它同时违反了两条行业铁律。对软件公司来说，FDE 模式毛利难看、增长吃力，是被 SaaS 教科书判定为「不规模化的服务生意」；对咨询公司来说，Palantir 又坚持把驻场中长出来的通用能力<b>回收进产品</b>（内部称为 productFOUNDRY 式的沉淀循环）——下一个客户交的钱更少、见效更快。于是一个奇怪的飞轮出现了：<b>每个项目都在给平台充值，平台每充一次值，下一个项目就更轻</b>。咨询公司卖人天（越重越赚），SaaS 公司卖席位（越轻越赚），Palantir 卖的是「结果的产品化率」。</p>
+
+  <div class="note reveal"><b>为什么这套打法对手学不动？</b>Databricks 们试过派解决方案架构师，咨询巨头试过自建产品，两边都卡在组织基因上：产品公司的考核容不下「三年才回本的驻场」，咨询公司的合伙人制度容不下「把 know-how 免费灌进平台」。Palantir 成立二十三年，一半时间没盈利，就靠 Karp 顶着华尔街的白眼把这个矛盾结构养到成熟。</div>
+
+  <h3 class="reveal"><span class="mono">02.2</span>Apollo：把「重部署」偷偷变成 SaaS 的暗线</h3>
+
+  <p class="reveal">外界看 Palantir 的转型，看到的是 AIP；内行看的是 Apollo。客户要求代码跑在自己的 VPC 甚至涉密网络里，传统做法等于每个客户一个定制版本，升级是灾难。Palantir 自研了统一的多环境持续交付系统 Apollo，像运维一个巨大 Kubernetes 集群一样运维散布在数百个隔离环境里的部署，<b>每天多次自动升级</b>。这是 FDE 模式能规模化的隐形前提：工程师驻场解决「最后一公里」，Apollo 保证这一公里不会每次都从零修路。软件行业很少有人意识到，Palantir 其实是一家伪装成数据分析公司的「交付能力公司」。</p>
+
+  <h3 class="reveal"><span class="mono">02.3</span>决策优先（Decision-First）：从要做的决定倒推要的数据</h3>
+
+  <p class="reveal">绝大多数数据项目是 data-first：先把所有数据汇进湖里，号称「治理好了再谈应用」——然后死在治理里。Palantir 的顺序相反：<b>先锁定一个客户真正想改的决策</b>（该派哪艘船？哪条产线先复产？给哪个病人排床位？），再倒推需要哪些对象、关系、数据，把无关数据一股脑留在外面。2023 年后的 AIP Bootcamp 把这套哲学浓缩到极致：五天，一个真用例，一个能跑的原型，「先看见结果，再谈三年路线图」。这是 Karp 引以为傲的销售创新——本质上是把 FDE 方法论本身做成了获客工具。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+      <marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fb3b3"/></marker></defs>
+      <!-- Data-first 路线（灰暗曲折） -->
+      <text x="40" y="52" class="mono" font-size="11" fill="#8d8a7d" letter-spacing="2">DATA-FIRST · 常见死法</text>
+      <g font-size="12.5" fill="#8d8a7d">
+        <rect x="40" y="70" width="120" height="42" rx="4" fill="none" stroke="#2d3749"/><text x="100" y="95" text-anchor="middle">汇入所有数据</text>
+        <rect x="210" y="70" width="120" height="42" rx="4" fill="none" stroke="#2d3749"/><text x="270" y="95" text-anchor="middle">治理数年</text>
+        <rect x="380" y="70" width="120" height="42" rx="4" fill="none" stroke="#2d3749"/><text x="440" y="95" text-anchor="middle">数据字典</text>
+        <rect x="550" y="70" width="150" height="42" rx="4" fill="none" stroke="#5a3530"/><text x="625" y="95" text-anchor="middle" fill="#c96a5a">预算耗尽 / 换 CIO</text>
+        <line x1="160" y1="91" x2="206" y2="91" stroke="#2d3749" stroke-width="1.2" marker-end="url(#arc)"/>
+        <line x1="330" y1="91" x2="376" y2="91" stroke="#2d3749" stroke-width="1.2" marker-end="url(#arc)"/>
+        <line x1="500" y1="91" x2="546" y2="91" stroke="#2d3749" stroke-width="1.2" marker-end="url(#arc)"/>
+      </g>
+      <text x="735" y="96" class="mono" font-size="11" fill="#615f55">✕ 从未触达决策</text>
+      <!-- Decision-first 路线（高亮直达） -->
+      <text x="40" y="192" class="mono" font-size="11" fill="#e8a33d" letter-spacing="2">DECISION-FIRST · PALANTIR 路线</text>
+      <g font-size="12.5" fill="#e9e4d6">
+        <rect x="40" y="210" width="170" height="46" rx="4" fill="rgba(232,163,61,.08)" stroke="#e8a33d" stroke-width="1.2"/><text x="125" y="238" text-anchor="middle">锁定一个真决策</text>
+        <rect x="270" y="210" width="170" height="46" rx="4" fill="none" stroke="#e8a33d" stroke-opacity=".6"/><text x="355" y="238" text-anchor="middle">倒推需要的对象</text>
+        <rect x="500" y="210" width="170" height="46" rx="4" fill="none" stroke="#e8a33d" stroke-opacity=".6"/><text x="585" y="238" text-anchor="middle">最小数据集接入</text>
+        <rect x="730" y="210" width="150" height="46" rx="4" fill="rgba(95,179,179,.10)" stroke="#5fb3b3" stroke-width="1.2"/><text x="805" y="238" text-anchor="middle" fill="#5fb3b3">闭环应用上线</text>
+        <line x1="210" y1="233" x2="266" y2="233" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#ar)"/>
+        <line x1="440" y1="233" x2="496" y2="233" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#ar)"/>
+        <line x1="670" y1="233" x2="726" y2="233" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#ar)"/>
+      </g>
+      <text x="40" y="290" font-size="12" fill="#615f55">无关的数据继续留在原地 —— 治理不是前提，是在一个个决策闭环里滚动完成的过程</text>
+    </svg>
+    </div>
+    <figcaption><b>图 02 · 两种开局哲学。</b>data-first 试图先建立「全景地图」再使用，通常死在半途；decision-first 从一个要做的决定出发，只接需要的数据，快速闭环后再横向扩张。AIP Bootcamp 是后者的五天压缩版。</figcaption>
+  </figure>
+</section>
+
+<!-- ══════════════ 03 ONTOLOGY 图解 ══════════════ -->
+<section class="ch" id="s3">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 03 / ONTOLOGY · 本体</div>
+    <h2>Ontology 到底是什么：先讲词源，再讲图，最后讲透</h2>
+    <div class="desc">这是理解 Palantir 的钥匙，也是 AI 时代每个技术人都该补的概念。</div>
+  </div>
+
+  <h3 class="reveal"><span class="mono">03.1</span>词源：一个哲学词的三次转世</h3>
+
+  <p class="reveal"><b>Ontology（本体论 / 存在论）</b>在哲学里的历史有两千多年：亚里士多德的《形而上学》问的就是「世界上有哪些种类的东西存在」。这是它的第一世。第二世在计算机科学：1993 年斯坦福的 Tom Gruber 给了它一个工程定义——「<b>对某个概念世界的显式、形式化规格说明</b>」（an explicit specification of a conceptualization）。翻译成人话：如果你要造一个医院信息系统，你得先明确回答——在「我们的医院」这个世界里，存在着哪些东西（病人、医生、床位、处方、检验单）？每种东西有什么属性？互相之间是什么关系？这份「世界说明书」就是本体。第三世在 Palantir：它把本体从学术论文搬进了工厂、油井和战场，并且<b>给本体加上了「手」——Action（动作）</b>，让描述世界的模型能够直接改变世界。</p>
+
+  <div class="pull reveal">数据库告诉你「表里有什么行」，本体告诉你「世界里有什么东西、它们如何相连、你能对它们做什么」。<small>— 一句话版本</small></div>
+
+  <p class="reveal">再打个比方。传统数据平台像给你一抽屉照片：每张照片（报表）都是某个瞬间的切片，真实、清晰，但照片之间没有道路。本体像一座<b>活的城市地图</b>：建筑（对象）、门牌（属性）、街道（关系）一一对应现实，你可以查询「从这到那怎么走」，甚至直接在地图上「下单派车」（动作）。更进一步——它不是普通地图，而是数字孪生级别：现实里卡车移动了，地图上的卡车跟着移动；你在地图上改派了卡车，现实里的司机立刻收到新指令。</p>
+
+  <h3 class="reveal"><span class="mono">03.2</span>全景：数据在 Palantir 世界里如何流动</h3>
+
+  <p class="reveal">下图是整个报告最重要的一张图。三层结构：底下是混乱的现实（几百个互不相通的系统），中间是本体（把现实翻译成对象和关系的语义层），顶上是决策与行动（看板、模拟、Agent）。注意两个方向：数据向上被「赋予含义」，动作向下「写回现实」——<b>这是它与所有「只读」型数据产品的分水岭</b>。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 920 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fb3b3"/></marker>
+        <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+        <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26,0 H0 V26" fill="none" stroke="#1a2233" stroke-width="1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="920" height="620" fill="url(#grid)"/>
+
+      <!-- 顶层：决策与行动 -->
+      <rect x="60" y="26" width="800" height="96" rx="6" fill="rgba(95,179,179,.07)" stroke="#5fb3b3" stroke-opacity=".55"/>
+      <text x="80" y="54" class="mono" font-size="11" fill="#5fb3b3" letter-spacing="3">LAYER 3 · 决策与行动层</text>
+      <text x="80" y="76" font-size="13" fill="#c4beae">运营看板 · 实时预警 · 「假设」模拟（改派三艘船会怎样？）· Agent 自动执行</text>
+      <g font-size="12" fill="#e9e4d6">
+        <rect x="80" y="88" width="130" height="26" rx="3" fill="none" stroke="#3a4658"/><text x="145" y="105" text-anchor="middle">供应链控制塔</text>
+        <rect x="225" y="88" width="130" height="26" rx="3" fill="none" stroke="#3a4658"/><text x="290" y="105" text-anchor="middle">战情指挥室</text>
+        <rect x="370" y="88" width="150" height="26" rx="3" fill="none" stroke="#3a4658"/><text x="445" y="105" text-anchor="middle">AIP Agent 工作流</text>
+        <rect x="535" y="88" width="150" height="26" rx="3" fill="none" stroke="#3a4658"/><text x="610" y="105" text-anchor="middle">一线人员移动端</text>
+      </g>
+
+      <!-- 上行箭头 -->
+      <line x1="460" y1="300" x2="460" y2="128" stroke="#5fb3b3" stroke-width="1.6" marker-end="url(#a1)"/>
+      <text x="475" y="196" font-size="12.5" fill="#5fb3b3">查询 / 模拟 / 触发</text>
+      <text x="475" y="216" font-size="11" fill="#615f55">应用不再直连数据库，只通过本体说话</text>
+
+      <!-- 中层：本体 -->
+      <rect x="60" y="300" width="800" height="160" rx="6" fill="rgba(232,163,61,.08)" stroke="#e8a33d" stroke-width="1.4"/>
+      <text x="80" y="328" class="mono" font-size="12" fill="#e8a33d" letter-spacing="4">LAYER 2 · ONTOLOGY 语义层</text>
+      <text x="80" y="350" font-size="13" fill="#e9e4d6">把企业的现实表达为 <tspan fill="#e8a33d">对象</tspan>、<tspan fill="#e8a33d">属性</tspan>、<tspan fill="#e8a33d">关系</tspan>、<tspan fill="#e8a33d">动作</tspan> —— 一份机器可读、人可辩论的「世界模型」</text>
+      <!-- 对象节点 -->
+      <g font-size="12.5">
+        <rect x="88" y="368" width="92" height="36" rx="18" fill="#131b29" stroke="#e8a33d" stroke-opacity=".8"/><text x="134" y="391" text-anchor="middle" fill="#e9e4d6">客户</text>
+        <rect x="228" y="368" width="92" height="36" rx="18" fill="#131b29" stroke="#e8a33d" stroke-opacity=".8"/><text x="274" y="391" text-anchor="middle" fill="#e9e4d6">订单</text>
+        <rect x="368" y="368" width="92" height="36" rx="18" fill="#131b29" stroke="#e8a33d" stroke-opacity=".8"/><text x="414" y="391" text-anchor="middle" fill="#e9e4d6">产线</text>
+        <rect x="508" y="368" width="92" height="36" rx="18" fill="#131b29" stroke="#e8a33d" stroke-opacity=".8"/><text x="554" y="391" text-anchor="middle" fill="#e9e4d6">零件</text>
+        <rect x="648" y="368" width="92" height="36" rx="18" fill="#131b29" stroke="#e8a33d" stroke-opacity=".8"/><text x="694" y="391" text-anchor="middle" fill="#e9e4d6">卡车</text>
+        <!-- 关系线 -->
+        <line x1="180" y1="386" x2="224" y2="386" stroke="#e8a33d" stroke-opacity=".5" stroke-width="1.1"/><text x="202" y="378" text-anchor="middle" class="mono" font-size="8.5" fill="#8d8a7d">下单</text>
+        <line x1="320" y1="386" x2="364" y2="386" stroke="#e8a33d" stroke-opacity=".5" stroke-width="1.1"/><text x="342" y="378" text-anchor="middle" class="mono" font-size="8.5" fill="#8d8a7d">消耗</text>
+        <line x1="460" y1="386" x2="504" y2="386" stroke="#e8a33d" stroke-opacity=".5" stroke-width="1.1"/><text x="482" y="378" text-anchor="middle" class="mono" font-size="8.5" fill="#8d8a7d">产出</text>
+        <line x1="600" y1="386" x2="644" y2="386" stroke="#e8a33d" stroke-opacity=".5" stroke-width="1.1"/><text x="622" y="378" text-anchor="middle" class="mono" font-size="8.5" fill="#8d8a7d">承运</text>
+      </g>
+      <!-- 四要素标签 -->
+      <g class="mono" font-size="10.5">
+        <text x="88" y="436" fill="#e8a33d">OBJECTS 对象</text><text x="240" y="436" fill="#8d8a7d">现实世界里的「东西」，一物一 ID，跨系统唯一</text>
+        <text x="88" y="452" fill="#e8a33d">PROPERTIES 属性</text><text x="240" y="452" fill="#8d8a7d">对象的字段：载重、状态、交期……</text>
+      </g>
+      <!-- Action -->
+      <rect x="640" y="424" width="200" height="34" rx="4" fill="rgba(95,179,179,.12)" stroke="#5fb3b3" stroke-dasharray="4 3"/>
+      <text x="740" y="445" text-anchor="middle" font-size="12" fill="#5fb3b3">ACTIONS 动作 ⚡ 写回现实</text>
+
+      <!-- 下行箭头（写回） -->
+      <path d="M700,460 L700,530" fill="none" stroke="#e8a33d" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+      <text x="714" y="500" font-size="12.5" fill="#e8a33d">改派卡车 / 创建工单 / 更新状态</text>
+
+      <!-- 上行箭头（数据进入） -->
+      <path d="M230,530 L230,466" fill="none" stroke="#5fb3b3" stroke-width="1.6" marker-end="url(#a1)"/>
+      <text x="246" y="500" font-size="12.5" fill="#5fb3b3">数据被映射为对象，源系统的权限被原样保留</text>
+
+      <!-- 底层：源系统 -->
+      <rect x="60" y="530" width="800" height="70" rx="6" fill="none" stroke="#2d3749"/>
+      <text x="80" y="556" class="mono" font-size="11" fill="#8d8a7d" letter-spacing="3">LAYER 1 · 数据源层 —— 现实的原始痕迹（互不相通）</text>
+      <g font-size="12" fill="#8d8a7d">
+        <rect x="80" y="566" width="86" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="123" y="582" text-anchor="middle">ERP</text>
+        <rect x="180" y="566" width="86" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="223" y="582" text-anchor="middle">MES</text>
+        <rect x="280" y="566" width="86" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="323" y="582" text-anchor="middle">CRM</text>
+        <rect x="380" y="566" width="100" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="430" y="582" text-anchor="middle">IoT 传感器</text>
+        <rect x="494" y="566" width="100" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="544" y="582" text-anchor="middle">物流 TMS</text>
+        <rect x="608" y="566" width="100" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="658" y="582" text-anchor="middle">Excel 巫毒</text>
+        <rect x="722" y="566" width="118" height="24" rx="3" fill="none" stroke="#3a4658"/><text x="781" y="582" text-anchor="middle">非结构化文档</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption><b>图 03 · Ontology 三层架构（本报告核心图）。</b>底层是数据源的现实，中层把现实翻译成对象—关系—动作的世界模型，顶层做决策并直接行动。双向箭头是关键：数据上行被赋予含义，动作下行写回生产系统——这让平台从「镜子」变成「手」。</figcaption>
+  </figure>
+
+  <h3 class="reveal"><span class="mono">03.3</span>四要素拆解：一个供应链小宇宙</h3>
+
+  <p class="reveal">把中层放大了看。假设一家制造企业，它的本体里至少有这些对象（OBJECTS）：客户、工厂、产线、零件、库存、订单、卡车、供应商。每个对象有属性（PROPERTIES）：卡车有「载重/当前位置/状态」，零件有「库存水位/交期/良率」。对象之间有关系（LINKS）：订单「消耗」零件、卡车「承运」订单、产线「产出」零件。而 Palantir 的独门一刀是第四个要素——动作（ACTIONS）：「改派卡车」「创建补货工单」「暂停产线」——它们不是界面按钮，而是<b>本体里的一等公民</b>：有严格的输入输出类型、权限约束、审计记录，可以被看板点、被人点、也可以被 Agent 调用。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+        <marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fb3b3"/></marker>
+      </defs>
+      <!-- 供应商 -->
+      <rect x="50" y="60" width="150" height="74" rx="6" fill="#131b29" stroke="#3a4658"/>
+      <text x="125" y="86" text-anchor="middle" font-size="14" fill="#e9e4d6" font-weight="600">供应商</text>
+      <text x="125" y="106" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">交期:12d · 良率:98%</text>
+      <text x="125" y="121" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">属性 PROPERTIES</text>
+      <!-- 工厂/产线 -->
+      <rect x="270" y="50" width="170" height="94" rx="6" fill="#131b29" stroke="#e8a33d" stroke-opacity=".7"/>
+      <text x="355" y="78" text-anchor="middle" font-size="14" fill="#e9e4d6" font-weight="600">工厂 · 产线</text>
+      <text x="355" y="99" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">产能:82% · 状态:运行</text>
+      <text x="355" y="114" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">OEE · 计划停机窗口</text>
+      <text x="355" y="132" text-anchor="middle" class="mono" font-size="9" fill="#e8a33d">对象 OBJECT</text>
+      <!-- 零件 -->
+      <rect x="490" y="60" width="150" height="74" rx="6" fill="#131b29" stroke="#3a4658"/>
+      <text x="565" y="86" text-anchor="middle" font-size="14" fill="#e9e4d6" font-weight="600">零件 P-3471</text>
+      <text x="565" y="106" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">库存:2.3 天 ← 告警</text>
+      <text x="565" y="121" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">属性 PROPERTIES</text>
+      <!-- 卡车 -->
+      <rect x="700" y="60" width="150" height="74" rx="6" fill="#131b29" stroke="#3a4658"/>
+      <text x="775" y="86" text-anchor="middle" font-size="14" fill="#e9e4d6" font-weight="600">卡车 T-88</text>
+      <text x="775" y="106" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">载重:20t · 位置:实时</text>
+      <text x="775" y="121" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">属性 PROPERTIES</text>
+      <!-- 关系 -->
+      <line x1="200" y1="97" x2="266" y2="97" stroke="#e8a33d" stroke-opacity=".55" stroke-width="1.2" marker-end="url(#b1)"/><text x="233" y="88" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">供应</text>
+      <line x1="440" y1="97" x2="486" y2="97" stroke="#e8a33d" stroke-opacity=".55" stroke-width="1.2" marker-end="url(#b1)"/><text x="463" y="88" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">产出</text>
+      <line x1="640" y1="97" x2="696" y2="97" stroke="#e8a33d" stroke-opacity=".55" stroke-width="1.2" marker-end="url(#b1)"/><text x="668" y="88" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">装运</text>
+      <text x="470" y="36" text-anchor="middle" class="mono" font-size="10" fill="#e8a33d" letter-spacing="3">LINKS 关系 —— 对象之间的动词</text>
+
+      <!-- 决策场景 -->
+      <rect x="50" y="210" width="470" height="160" rx="6" fill="none" stroke="#2d3749" stroke-dasharray="6 4"/>
+      <text x="70" y="240" class="mono" font-size="11" fill="#c96a5a" letter-spacing="2">传统做法 · 人肉闭环（T+1）</text>
+      <g font-size="12" fill="#8d8a7d">
+        <text x="70" y="270">① 分析师明早跑 SQL 发现 P-3471 库存告警（昨日快照）</text>
+        <text x="70" y="298">② 发邮件问采购，采购打电话问三家供应商</text>
+        <text x="70" y="326">③ 排产会上周四才开，改排产要走 ERP 变更单</text>
+        <text x="70" y="354">④ 三天后卡车才被改派 —— 而产线已停 6 小时</text>
+      </g>
+      <!-- 本体做法 -->
+      <rect x="560" y="210" width="290" height="160" rx="6" fill="rgba(95,179,179,.07)" stroke="#5fb3b3"/>
+      <text x="580" y="240" class="mono" font-size="11" fill="#5fb3b3" letter-spacing="2">本体 + AIP · 分钟级闭环</text>
+      <g font-size="12" fill="#c4beae">
+        <text x="580" y="270">① 库存对象跌破阈值，规则即时触发</text>
+        <text x="580" y="298">② Agent 在本体上模拟三个补货方案</text>
+        <text x="580" y="326">③ 人一键批准 ACTION：</text>
+        <text x="592" y="348" fill="#5fb3b3">创建工单 + 改派卡车 T-88 → 写回 ERP</text>
+      </g>
+      <!-- action 箭头 从零件到 action 框 -->
+      <path d="M565,134 C565,180 620,190 660,208" fill="none" stroke="#5fb3b3" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#b2)"/>
+      <text x="470" y="185" class="mono" font-size="9.5" fill="#5fb3b3">触发 ACTION 动作（类型化 · 有权限 · 全审计）</text>
+    </svg>
+    </div>
+    <figcaption><b>图 04 · 四要素与两种闭环的对比。</b>同一件事：零件缺货。传统路径走「报表→邮件→会议→人工改系统」，周期以天计；本体路径里，库存对象、阈值规则与「改派/创建工单」动作在同一个模型内，闭环以分钟计。Actions 是 Palantir 对「本体」概念最关键的私有扩展——它让模型不仅能描述世界，还能改变世界。</figcaption>
+  </figure>
+
+  <h3 class="reveal"><span class="mono">03.4</span>和 BI / 数据仓库的本质区别：不是更快，是换了一个世界</h3>
+
+  <p class="reveal">常见误解是「Ontology 就是语义层 / 数据目录 / GoodData 那种 metrics layer」。区别比想象中根本。BI 的世界单位是<b>「指标」</b>：销售额、转化率、库存周转——它们是现实的「摘要」，摘要注定丢失细节，而且一到「所以该干什么」就断链，剩下的路靠人脑和会议补完。本体的世界单位是<b>「对象」</b>：具体的那辆卡车、那张订单、那个病人——摘要只是对象上的一个视图，对象本身一直完整地在那里，可以查询、模拟、操作。从指标退回到对象，就像从GDP退回到城市本身。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 920 330" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8d8a7d"/></marker>
+        <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+        <marker id="c3" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M10,0 L0,5 L10,10 z" fill="#e8a33d"/></marker>
+      </defs>
+      <!-- BI 链路 -->
+      <text x="40" y="46" class="mono" font-size="11" fill="#8d8a7d" letter-spacing="2">传统 BI 链路 · 终点是人脑</text>
+      <g font-size="12.5" fill="#8d8a7d">
+        <rect x="40" y="62" width="110" height="40" rx="4" fill="none" stroke="#2d3749"/><text x="95" y="86" text-anchor="middle">源系统</text>
+        <rect x="195" y="62" width="110" height="40" rx="4" fill="none" stroke="#2d3749"/><text x="250" y="86" text-anchor="middle">ETL</text>
+        <rect x="350" y="62" width="110" height="40" rx="4" fill="none" stroke="#2d3749"/><text x="405" y="86" text-anchor="middle">数仓</text>
+        <rect x="505" y="62" width="110" height="40" rx="4" fill="none" stroke="#2d3749"/><text x="560" y="86" text-anchor="middle">报表</text>
+        <rect x="660" y="62" width="120" height="40" rx="4" fill="none" stroke="#5a3530"/><text x="720" y="86" text-anchor="middle" fill="#c96a5a">人脑 · 会议</text>
+        <rect x="815" y="62" width="70" height="40" rx="4" fill="none" stroke="#5a3530" stroke-dasharray="4 3"/><text x="850" y="80" text-anchor="middle" fill="#c96a5a" font-size="11">手工</text><text x="850" y="95" text-anchor="middle" fill="#c96a5a" font-size="11">执行</text>
+        <line x1="150" y1="82" x2="191" y2="82" stroke="#2d3749" stroke-width="1.1" marker-end="url(#c1)"/>
+        <line x1="305" y1="82" x2="346" y2="82" stroke="#2d3749" stroke-width="1.1" marker-end="url(#c1)"/>
+        <line x1="460" y1="82" x2="501" y2="82" stroke="#2d3749" stroke-width="1.1" marker-end="url(#c1)"/>
+        <line x1="615" y1="82" x2="656" y2="82" stroke="#2d3749" stroke-width="1.1" marker-end="url(#c1)"/>
+        <line x1="780" y1="82" x2="811" y2="82" stroke="#2d3749" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#c1)"/>
+      </g>
+      <text x="40" y="130" font-size="11.5" fill="#615f55">单向流动 · 每个断点都是延迟、失真与「甩锅现场」· 回答的问题是「发生了什么」</text>
+
+      <!-- Ontology 链路 -->
+      <text x="40" y="186" class="mono" font-size="11" fill="#e8a33d" letter-spacing="2">ONTOLOGY 链路 · 终点是行动，且双向循环</text>
+      <g font-size="13" fill="#e9e4d6">
+        <rect x="40" y="202" width="200" height="52" rx="5" fill="none" stroke="#3a4658"/><text x="140" y="226" text-anchor="middle">源系统（只读镜像）</text><text x="140" y="243" text-anchor="middle" font-size="10.5" fill="#8d8a7d">ERP · MES · CRM · IoT</text>
+        <rect x="360" y="202" width="200" height="52" rx="5" fill="rgba(232,163,61,.10)" stroke="#e8a33d" stroke-width="1.3"/><text x="460" y="226" text-anchor="middle" fill="#e8a33d" font-weight="600">ONTOLOGY 世界模型</text><text x="460" y="243" text-anchor="middle" font-size="10.5" fill="#c4beae">对象 · 属性 · 关系 · 动作</text>
+        <rect x="680" y="202" width="200" height="52" rx="5" fill="none" stroke="#5fb3b3"/><text x="780" y="226" text-anchor="middle" fill="#5fb3b3">应用 · 模拟 · Agent</text><text x="780" y="243" text-anchor="middle" font-size="10.5" fill="#8d8a7d">决策在这里发生并执行</text>
+        <line x1="240" y1="220" x2="356" y2="220" stroke="#e8a33d" stroke-width="1.3" marker-end="url(#c2)"/>
+        <line x1="356" y1="238" x2="240" y2="238" stroke="#e8a33d" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#c3)"/>
+        <line x1="560" y1="220" x2="676" y2="220" stroke="#e8a33d" stroke-width="1.3" marker-end="url(#c2)"/>
+        <line x1="676" y1="238" x2="560" y2="238" stroke="#e8a33d" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#c3)"/>
+      </g>
+      <text x="40" y="288" font-size="11.5" fill="#8d8a7d">上行 = 数据被赋予含义 ｜ 下行虚线 = ACTION 写回源系统（受权限约束、全审计）· 回答的问题是「现在该做什么」</text>
+      <text x="40" y="314" class="mono" font-size="10" fill="#615f55">BI 的终点是「知道」，Ontology 的终点是「做到」—— 这一个词的差别，就是 20 年产品路线的差别</text>
+    </svg>
+    </div>
+    <figcaption><b>图 05 · 两条链路的哲学差异。</b>BI 链路止步于报表，剩余路径由人脑和会议完成，因此永远是 T+1 的、政治化的；本体链路是双向闭环，行动结果回到模型，模型驱动下一步行动——数据平台第一次拥有了「新陈代谢」。</figcaption>
+  </figure>
+
+  <h3 class="reveal"><span class="mono">03.5</span>为什么 LLM 时代，Ontology 突然变成最贵的东西</h3>
+
+  <p class="reveal">2023 年之前，Ontology 是 Palantir 内部的好东西，但说服一个 CIO 为「语义层」付几百万美元是件费劲的事——价值听起来抽象。ChatGPT 之后逻辑彻底反转：企业突然需要给大模型一个<b>安全的身体</b>。直接让 LLM 写 SQL 操作生产库？一次幻觉就是一次事故。而 Ontology 恰好是一个「类型化的世界接口」：模型能调用的每个函数（读对象、遍历关系、触发动作）都有明确的输入输出、权限与审计——<b>幻觉出了界，也过不了本体这道闸门</b>。</p>
+
+  <p class="reveal">AIP 的架构可以概括为一个公式：<b>企业 AI = LLM（推理） + Ontology（现实） + 权限（边界） + 审计（责任）</b>。Agent 想给客户打折？可以，但它只能调用本体里那个叫「创建折扣申请」的 Action，输入输出类型固定，权限按人/角色校验，事后可追责。这就是 Palantir 敢说「我们的 AI 落地不靠运气」的底气。更妙的是生态位反转：过去 Snowflake/Databricks 之下的「语义层」可有可无，现在它成了大模型与企业现实之间<b>唯一的受控通道</b>——谁拥有本体，谁就拥有 Agent 时代的企业操作界面。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fb3b3"/></marker>
+        <marker id="d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+      </defs>
+      <!-- LLM 大脑 -->
+      <g>
+        <ellipse cx="450" cy="86" rx="150" ry="62" fill="rgba(232,163,61,.07)" stroke="#e8a33d" stroke-width="1.2"/>
+        <text x="450" y="74" text-anchor="middle" font-size="16" fill="#e8a33d" font-weight="600">LLM · 大脑</text>
+        <text x="450" y="98" text-anchor="middle" font-size="11.5" fill="#c4beae">推理 · 规划 · 理解意图</text>
+        <text x="450" y="118" text-anchor="middle" class="mono" font-size="9.5" fill="#8d8a7d">GPT / Claude / Llama —— 可插拔，不是壁垒</text>
+      </g>
+      <!-- 闸门 -->
+      <rect x="330" y="182" width="240" height="44" rx="22" fill="rgba(201,106,90,.10)" stroke="#c96a5a"/>
+      <text x="450" y="200" text-anchor="middle" font-size="12.5" fill="#c96a5a" font-weight="600">本体闸门 · GROUNDING</text>
+      <text x="450" y="217" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">类型化接口 · 权限校验 · 幻觉拦截 · 全审计</text>
+      <!-- 双向箭头 -->
+      <line x1="410" y1="150" x2="410" y2="178" stroke="#5fb3b3" stroke-width="1.5" marker-end="url(#d1)"/>
+      <line x1="490" y1="178" x2="490" y2="150" stroke="#e8a33d" stroke-width="1.5" marker-end="url(#d2)"/>
+      <text x="330" y="168" text-anchor="end" font-size="11" fill="#5fb3b3">感知：读对象/走关系</text>
+      <text x="570" y="168" font-size="11" fill="#e8a33d">行动：触发 ACTION</text>
+      <!-- 本体世界 -->
+      <g>
+        <rect x="150" y="252" width="600" height="112" rx="8" fill="rgba(95,179,179,.06)" stroke="#5fb3b3" stroke-opacity=".7"/>
+        <text x="450" y="282" text-anchor="middle" font-size="15" fill="#5fb3b3" font-weight="600">ONTOLOGY · 企业现实的唯一数字化身</text>
+        <g font-size="12" fill="#c4beae">
+          <rect x="185" y="300" width="80" height="30" rx="15" fill="#131b29" stroke="#3a4658"/><text x="225" y="319" text-anchor="middle">订单</text>
+          <rect x="295" y="300" width="80" height="30" rx="15" fill="#131b29" stroke="#3a4658"/><text x="335" y="319" text-anchor="middle">库存</text>
+          <rect x="405" y="300" width="80" height="30" rx="15" fill="#131b29" stroke="#3a4658"/><text x="445" y="319" text-anchor="middle">产线</text>
+          <rect x="515" y="300" width="80" height="30" rx="15" fill="#131b29" stroke="#3a4658"/><text x="555" y="319" text-anchor="middle">卡车</text>
+          <rect x="625" y="300" width="95" height="30" rx="15" fill="#131b29" stroke="#3a4658"/><text x="672" y="319" text-anchor="middle">客户</text>
+          <line x1="265" y1="315" x2="291" y2="315" stroke="#5fb3b3" stroke-opacity=".5"/><line x1="375" y1="315" x2="401" y2="315" stroke="#5fb3b3" stroke-opacity=".5"/><line x1="485" y1="315" x2="511" y2="315" stroke="#5fb3b3" stroke-opacity=".5"/><line x1="595" y1="315" x2="621" y2="315" stroke="#5fb3b3" stroke-opacity=".5"/>
+        </g>
+        <text x="450" y="356" text-anchor="middle" class="mono" font-size="9.5" fill="#8d8a7d">动作写回生产系统 · 每一步留痕 · 二十年的权限体系在此生效</text>
+      </g>
+      <text x="735" y="140" class="mono" font-size="10" fill="#615f55">没有本体的大模型：</text>
+      <text x="735" y="158" class="mono" font-size="10" fill="#615f55">一颗泡在福尔马林里</text>
+      <text x="735" y="176" class="mono" font-size="10" fill="#615f55">的大脑，很聪明，</text>
+      <text x="735" y="194" class="mono" font-size="10" fill="#615f55">摸不到现实。</text>
+    </svg>
+    </div>
+    <figcaption><b>图 06 · AIP 的核心构造：LLM 是大脑，Ontology 是身体，中间是一道闸门。</b>模型永远不直接接触数据库和文档堆，它的一切感知与行动都必须通过本体的类型化接口。这让「AI 替公司干活」从风险命题变成工程命题——也正是 Palantir 在 AI 时代突然起飞的结构性原因。</figcaption>
+  </figure>
+
+  <div class="note reveal"><b>一句话记住 Ontology：</b>它是企业现实的「单一事实版本」——不是单一事实「数据源」（数据仍散落各处），而是单一事实「模型」：全公司对「我们世界里有什么东西、怎么关联、能做什么」达成的那份唯一共识。难的不是软件，是让所有部门在这份共识上签字。</div>
+</section>
+
+<!-- ══════════════ 04 数据梳理 ══════════════ -->
+<section class="ch" id="s4">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 04 / FIELD WORK · 数据梳理</div>
+    <h2>它到底怎么把一家公司的数据「梳理清晰」？</h2>
+    <div class="desc">综合官方文档、财报电话会、客户披露与前员工叙述的交叉还原。</div>
+  </div>
+
+  <p class="reveal">先说结论：Palantir 梳理数据的方式，与其说是一套技术流程，不如说是一套<b>「社会技术」流程</b>——一半的时间在处理数据，另一半的时间在处理人。综合多方信源（官方产品文档与白皮书、历季财报电话会、bp/NHS/空客等客户的公开演讲与案例披露、前员工在博客与访谈中的还原），可以拼出一条相当稳定的实施路径：</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 940 260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8a33d"/></marker>
+      </defs>
+      <g font-size="12.5">
+        <rect x="30" y="60" width="152" height="120" rx="6" fill="#131b29" stroke="#3a4658"/>
+        <text x="106" y="52" text-anchor="middle" class="mono" font-size="15" fill="#e8a33d">①</text>
+        <text x="106" y="90" text-anchor="middle" fill="#e9e4d6" font-weight="600">侦察与选点</text>
+        <text x="106" y="112" text-anchor="middle" font-size="11" fill="#8d8a7d">FDE 进场访谈</text>
+        <text x="106" y="130" text-anchor="middle" font-size="11" fill="#8d8a7d">锁定一个高价值</text>
+        <text x="106" y="148" text-anchor="middle" font-size="11" fill="#8d8a7d">决策（不是全景）</text>
+        <text x="106" y="168" text-anchor="middle" class="mono" font-size="9" fill="#615f55">周 1–2</text>
+
+        <rect x="214" y="60" width="152" height="120" rx="6" fill="#131b29" stroke="#3a4658"/>
+        <text x="290" y="52" text-anchor="middle" class="mono" font-size="15" fill="#e8a33d">②</text>
+        <text x="290" y="90" text-anchor="middle" fill="#e9e4d6" font-weight="600">接入与管道</text>
+        <text x="290" y="112" text-anchor="middle" font-size="11" fill="#8d8a7d">只读抽取源系统</text>
+        <text x="290" y="130" text-anchor="middle" font-size="11" fill="#8d8a7d">数据流入平台</text>
+        <text x="290" y="148" text-anchor="middle" font-size="11" fill="#8d8a7d">源系统零改动</text>
+        <text x="290" y="168" text-anchor="middle" class="mono" font-size="9" fill="#615f55">周 2–4</text>
+
+        <rect x="398" y="60" width="152" height="120" rx="6" fill="rgba(232,163,61,.10)" stroke="#e8a33d" stroke-width="1.3"/>
+        <text x="474" y="52" text-anchor="middle" class="mono" font-size="15" fill="#e8a33d">③</text>
+        <text x="474" y="90" text-anchor="middle" fill="#e8a33d" font-weight="600">本体建模</text>
+        <text x="474" y="112" text-anchor="middle" font-size="11" fill="#c4beae">业务专家+FDE 工作坊</text>
+        <text x="474" y="130" text-anchor="middle" font-size="11" fill="#c4beae">定义对象·关系·动作</text>
+        <text x="474" y="148" text-anchor="middle" font-size="11" fill="#c4beae">把老员工脑中的</text>
+        <text x="474" y="166" text-anchor="middle" font-size="11" fill="#c4beae">世界模型写下来</text>
+
+        <rect x="582" y="60" width="152" height="120" rx="6" fill="#131b29" stroke="#3a4658"/>
+        <text x="658" y="52" text-anchor="middle" class="mono" font-size="15" fill="#e8a33d">④</text>
+        <text x="658" y="90" text-anchor="middle" fill="#e9e4d6" font-weight="600">闭环应用</text>
+        <text x="658" y="112" text-anchor="middle" font-size="11" fill="#8d8a7d">为那个决策做最小应用</text>
+        <text x="658" y="130" text-anchor="middle" font-size="11" fill="#8d8a7d">动作写回生产系统</text>
+        <text x="658" y="148" text-anchor="middle" font-size="11" fill="#8d8a7d">指标开始真实移动</text>
+        <text x="658" y="168" text-anchor="middle" class="mono" font-size="9" fill="#615f55">周 5–8</text>
+
+        <rect x="766" y="60" width="152" height="120" rx="6" fill="rgba(95,179,179,.08)" stroke="#5fb3b3"/>
+        <text x="842" y="52" text-anchor="middle" class="mono" font-size="15" fill="#5fb3b3">⑤</text>
+        <text x="842" y="90" text-anchor="middle" fill="#5fb3b3" font-weight="600">产品化扩张</text>
+        <text x="842" y="112" text-anchor="middle" font-size="11" fill="#c4beae">复制到相邻用例</text>
+        <text x="842" y="130" text-anchor="middle" font-size="11" fill="#c4beae">通用组件回填平台</text>
+        <text x="842" y="148" text-anchor="middle" font-size="11" fill="#c4beae">FDE 逐步撤出</text>
+        <text x="842" y="168" text-anchor="middle" class="mono" font-size="9" fill="#615f55">持续</text>
+
+        <line x1="182" y1="120" x2="210" y2="120" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#e1)"/>
+        <line x1="366" y1="120" x2="394" y2="120" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#e1)"/>
+        <line x1="550" y1="120" x2="578" y2="120" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#e1)"/>
+        <line x1="734" y1="120" x2="762" y2="120" stroke="#e8a33d" stroke-width="1.2" marker-end="url(#e1)"/>
+        <!-- 回环 -->
+        <path d="M842,180 C842,236 106,236 106,182" fill="none" stroke="#5fb3b3" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#e1)"/>
+        <text x="474" y="252" text-anchor="middle" font-size="11" fill="#5fb3b3">每个闭环的沉淀让下一个闭环更轻 —— 这就是「重模式」能规模化的全部秘密</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption><b>图 07 · 五步实施路径（多方信源综合还原）。</b>注意第③步被高亮：本体建模是整个流程的心脏，也是最难外包、最难标准化的一步——因为它本质上是把组织内部散落在权力结构和老员工脑子里的共识，逼成一份显式的、可执行的模型。</figcaption>
+  </figure>
+
+  <h4 class="reveal">信源交叉后提炼的六条「梳理性原则」</h4>
+  <ol class="pts reveal">
+    <li><b>决策倒推，滚动治理。</b>不做「先治理三年」的全景梦。治理不是前置条件，而是在一个个决策闭环里滚动完成的副产品。Bootcamp 用五天验证这件事，单子就是这么签下来的。</li>
+    <li><b>源系统不动，数据只读汇入。</b>Foundry 从 ERP/MES/CRM 做只读抽取与管道清洗，客户现有系统零改造——这大幅降低了 IT 部门的抵触（虽然权限政治从未消失）。</li>
+    <li><b>权限保真（Permission-aware）。</b>源系统里「谁能看哪个字段」的 ACL 被原样映射进本体，分析员的视角和他在组织里的身份严格一致。这条来自早期在情报界与银行踩过的坑，现在是产品不可拆分的基因，也是它区别于「把所有数据倒进一个湖」方案的合规命门。</li>
+    <li><b>对象命名是一场政治谈判。</b>「客户」在销售系统里是线索、在财务系统里是付款主体、在物流系统里是收货地址——本体建模要求全公司用一个「客户」对象统一之。前员工的叙述里，最花时间的从来不是写转换代码，而是主持这场谈判：数据即权力，统一模型等于重新分配信息可见性。Palantir 的 FDE 实际上兼任「数据外交官」。</li>
+    <li><b>动作写回，把「镜子」变成「手」。</b>数据平台一旦只读，就永远只是成本中心；Action 让平台长出执行力，业务方才有理由每天打开它。这是留存与续费的真正来源。</li>
+    <li><b>组件回填，项目养平台。</b>每个项目里长出的可复用能力（某个行业的对象模板、某类管道、某个应用框架）回流进产品，下一个客户开局更快。竞品咨询公司做不到这一点，因为他们的激励是卖更多人天。</li>
+  </ol>
+
+  <h4 class="reveal">四个公开案例的交叉印证</h4>
+  <div class="tbl-wrap reveal"><table>
+    <tr><th>案例</th><th>接入什么</th><th>本体里建了什么</th><th>闭环到什么动作</th></tr>
+    <tr><td class="rowlab"><b>bp · 能源</b></td><td>油井、炼厂、油轮、管网、加油站的全价值链数据</td><td>油藏、装置、船次、库存等对象与调度关系</td><td>排产与调度的模拟—决策—执行；支撑其自称的「从石油公司到能源公司」的数字化底座</td></tr>
+    <tr><td class="rowlab"><b>NHS · 2020</b></td><td>检测、住院、床位、氧疗、疫苗等多源全国数据</td><td>机构、区域、病种、物资等对象的统一视图</td><td>疫苗与物资的优先级部署；几周内上线，£1 起步的战时合同</td></tr>
+    <tr><td class="rowlab"><b>空客 · 制造</b></td><td>全球供应商、备件、交付进度数据</td><td>供应商—零件—机型—订单的关系网络</td><td>供应链协同与交付决策</td></tr>
+    <tr><td class="rowlab"><b>乌克兰 · 2022—</b></td><td>战场情报、目标、后勤、人道与资产数据</td><td>战时对象模型的融合图谱</td><td>目标协同、物流调度与证据留存——Foundry 成了战时神经系统</td></tr>
+  </table></div>
+
+  <p class="reveal">同样值得记录的是失败面（信源里从不缺少）：交付重、依赖 FDE、客户担心「被锁死」；本体建模若没有业务方深度投入，会沦为漂亮的空模型；FDE 文化的高压与 burnout 在工程师社区里口碑参差；而在欧洲，隐私阵营对它的批评从未停歇。<b>把成功要素和失败模式放在一起看，结论很清楚：Palantir 卖的不是软件许可，是一种必须与客户组织深度耦合的「共生交付」——这既是它价值的来源，也是它一切争议与风险的来源。</b></p>
+</section>
+
+<!-- ══════════════ 05 横向竞争 ══════════════ -->
+<section class="ch" id="s5">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 05 / SYNCHRONIC · 横向分析</div>
+    <h2>竞争格局：它其实在跟两种完全不同的东西作战</h2>
+    <div class="desc">以 2026 年为切面，与同赛道玩家逐一对位。</div>
+  </div>
+
+  <p class="reveal">分析 Palantir 的竞争，最大的陷阱是用「大数据平台」这个品类去框它。实际上它同时打两场性质不同的战争：<b>一场向下</b>，对手是 Databricks、Snowflake、微软这些「数据基础设施」巨头——它们从底层存储计算往上看，认为语义层和应用层是生态的必然延伸；<b>一场向侧</b>，对手是 C3.ai 这类同样宣称「企业 AI 应用」的公司，以及所有咨询公司＋自建团队的组合拳。2025 年 3 月它宣布与 Databricks 互操作合作，等于承认了战线的重新划分：<b>湖仓做地基，本体做楼层</b>——但楼层才是收租的楼层。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 920 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="g2" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28,0 H0 V28" fill="none" stroke="#161d2b" stroke-width="1"/></pattern>
+      </defs>
+      <rect x="60" y="20" width="800" height="380" fill="url(#g2)" stroke="#232b3a"/>
+      <!-- 轴 -->
+      <line x1="460" y1="20" x2="460" y2="400" stroke="#2d3749" stroke-dasharray="4 5"/>
+      <line x1="60" y1="210" x2="860" y2="210" stroke="#2d3749" stroke-dasharray="4 5"/>
+      <text x="460" y="434" text-anchor="middle" font-size="12" fill="#8d8a7d">← 数据基础设施（存好、算好） ── 决策与行动闭环（用好、做掉）→</text>
+      <text x="46" y="210" text-anchor="end" font-size="12" fill="#8d8a7d" transform="rotate(-90 46 210)">← 通用自助工具 · 标准化交付</text>
+      <text x="38" y="330" text-anchor="middle" font-size="12" fill="#8d8a7d" transform="rotate(-90 38 330)">深度驻场 · 共生交付 →</text>
+
+      <!-- Snowflake -->
+      <g>
+        <circle cx="200" cy="110" r="46" fill="rgba(95,179,179,.10)" stroke="#5fb3b3"/>
+        <text x="200" y="104" text-anchor="middle" font-size="14" fill="#5fb3b3" font-weight="600">Snowflake</text>
+        <text x="200" y="122" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">云数仓 · FY25 ~$3.6B</text>
+      </g>
+      <!-- Databricks -->
+      <g>
+        <circle cx="330" cy="150" r="56" fill="rgba(232,163,61,.10)" stroke="#e8a33d"/>
+        <text x="330" y="142" text-anchor="middle" font-size="14" fill="#e8a33d" font-weight="600">Databricks</text>
+        <text x="330" y="160" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">湖仓+AI · ARR $4B+</text>
+      </g>
+      <!-- MS Fabric -->
+      <g>
+        <rect x="560" y="70" width="190" height="64" rx="8" fill="none" stroke="#3a4658"/>
+        <text x="655" y="96" text-anchor="middle" font-size="13.5" fill="#c4beae" font-weight="600">Microsoft Fabric</text>
+        <text x="655" y="116" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">全家桶捆绑 · 渠道碾压</text>
+      </g>
+      <!-- C3.ai -->
+      <g>
+        <rect x="170" y="270" width="170" height="64" rx="8" fill="none" stroke="#5a3530"/>
+        <text x="255" y="296" text-anchor="middle" font-size="13.5" fill="#c96a5a" font-weight="600">C3.ai</text>
+        <text x="255" y="316" text-anchor="middle" class="mono" font-size="9" fill="#8d8a7d">同类叙事 · 增长乏力</text>
+      </g>
+      <!-- 国产 -->
+      <g>
+        <rect x="390" y="286" width="200" height="60" rx="8" fill="none" stroke="#3a4658" stroke-dasharray="5 4"/>
+        <text x="490" y="310" text-anchor="middle" font-size="13" fill="#8d8a7d" font-weight="600">国内「数据中台」系</text>
+        <text x="490" y="328" text-anchor="middle" class="mono" font-size="9" fill="#615f55">多止步于数据层</text>
+      </g>
+      <!-- Palantir -->
+      <g>
+        <circle cx="730" cy="300" r="64" fill="rgba(232,163,61,.16)" stroke="#e8a33d" stroke-width="2"/>
+        <circle cx="730" cy="300" r="78" fill="none" stroke="#e8a33d" stroke-opacity=".35" stroke-dasharray="2 4"/>
+        <text x="730" y="292" text-anchor="middle" font-size="16" fill="#e8a33d" font-weight="700">PALANTIR</text>
+        <text x="730" y="312" text-anchor="middle" class="mono" font-size="9" fill="#c4beae">本体 × FDE × 行动闭环</text>
+      </g>
+      <text x="730" y="392" text-anchor="middle" class="mono" font-size="9.5" fill="#615f55">竞争的本质：最后一公里</text>
+    </svg>
+    </div>
+    <figcaption><b>图 08 · 生态位地图（2026 切面）。</b>横轴是「离决策与行动的距离」，纵轴是「交付深度」。Palantir 独占右上象限不是因为它技术更强，而是因为那个位置要求「驻场共生 + 安全权限 + 行动写回」三者同时成立——这是三种不同组织基因的化合物，分开看谁都有一两种，合起来只有它长齐了。</figcaption>
+  </figure>
+
+  <h3 class="reveal"><span class="mono">05.1</span>Databricks：从地基往上盖楼的天花板难题</h3>
+  <p class="reveal">Databricks 是最被看好的「从下往上」进攻者：湖仓一体（Delta Lake/Unity Catalog）垄断了数据地基，开源生态与 PhD 军团声望极高，ARR 早已超过 40 亿美元。它的路径是让数据团队自助完成从 ETL 到建模到 AI 的全链路。但向上攻的坡度越走越陡：地基生意卖的是「能力」，楼层生意卖的是「结果」——后者要求对客户的业务流程负责，要求工程师驻场，要求处理权限政治。2025 年两家宣布互操作（Palantir 的本体可以直接架在 Databricks 湖仓上），表面是双赢，实质是 Databricks 承认了「本楼层暂不归我」。对 Palantir 而言这一步同样精明：它主动把自己从「必须吞下数据层」的义务中解绑，专心收楼层的租。</p>
+
+  <h3 class="reveal"><span class="mono">05.2</span>Snowflake：把「存数据」做到极致，与「用数据」保持距离</h3>
+  <p class="reveal">Snowflake 是云计算时代最优雅的商业设计之一：按用量计费、零运维、生态市场。但它始终谨慎地把自己定位在「数据平台」而非「业务系统」——它的 Cortex AI 让数据团队能跑 RAG 和模型，但「改派哪辆卡车」这种决策仍然发生在别处。用户口碑的分裂也源于此：数据团队爱它的稳定与省心，业务方则经常说「数仓里什么都有，可我要的答案不在任何一张表里」。它与 Palantir 的关系更像水电厂与工厂：前者供能，后者产出。真正的战争只在企业预算表上发生——当 CIO 的钱只够先建数仓或先做 AI 应用闭环时，Palantir 的论证方式是残酷的：「先做闭环，数仓可以晚点买」。</p>
+
+  <h3 class="reveal"><span class="mono">05.3</span>Microsoft Fabric：渠道巨兽的合围</h3>
+  <p class="reveal">微软不需要在产品上赢，它只需要在合同上赢。Fabric 把 Power BI、Synapse、数据工厂、Copilot 打包进企业协议，对 CIO 的谈判姿态是「你的 ELP 里本来就有预算」。对 Palantir 威胁最大的是政府与国防市场：Azure 的政府云与安全合规资质齐全，Copilot 的分发能力恐怖。它的短板恰是 Palantir 的长板：<b>捆绑的东西越多，越没有一个东西对结果负责</b>。微软卖出的是「平台＋席位」，出了问题各组件互相指认；Palantir 卖的是「指标动了没有」。在超大规模、需要怪罪链条清晰的组织里，后者的溢价惊人。</p>
+
+  <h3 class="reveal"><span class="mono">05.4</span>C3.ai 与「国产数据中台」：两类镜像的教训</h3>
+  <p class="reveal">C3.ai 与 Palantir 叙事最像（企业 AI 应用平台、创始人出自企业软件世家），资本市场却给了完全不同的答案——增长长期在个位数到 20% 徘徊，客户集中且流失风波不断。对照之下可以说清 Palantir 的「贵」买的是什么：不是模型、不是平台，是<b>FDE 组织把部署做到底的纪律</b>——C3.ai 转向「消费式定价」试图轻量化，恰说明它扛不住重交付。国内 2020 前后的「数据中台」热潮则是一面更近的镜子：无数大厂把「统一数据、统一口径」做成了主题工程，投入以亿计——但大多停在数据层与报表层，没有走到对象建模与行动写回，也就没能形成决策闭环。事后复盘普遍归因于：缺少对结果负责的交付组织、缺少业务方深度参与的建模过程、把中台当 IT 项目而非组织变革。Palantir 的存在证明了这条路的终点是存在的——只是终点比大多数人以为的远得多。</p>
+
+  <div class="tbl-wrap reveal"><table>
+    <tr><th></th><th>PALANTIR</th><th>DATABRICKS</th><th>SNOWFLAKE</th><th>MS FABRIC</th></tr>
+    <tr><td class="rowlab"><b>本质生意</b></td><td>决策与行动闭环（结果）</td><td>数据与 AI 基础设施（能力）</td><td>云数仓（容量）</td><td>全家桶捆绑（席位）</td></tr>
+    <tr><td class="rowlab"><b>卖给谁</b></td><td>业务一把手 / 作战单位</td><td>数据团队 / CDO</td><td>数据平台团队</td><td>CIO / 采购</td></tr>
+    <tr><td class="rowlab"><b>交付方式</b></td><td>FDE 驻场共生 → 产品化</td><td>自助 + 解决方案架构师</td><td>自助 + 伙伴实施</td><td>渠道与合作伙伴</td></tr>
+    <tr><td class="rowlab"><b>语义层/本体</b></td><td>核心产品（含 Action 写回）</td><td>Unity Catalog 语义能力渐进</td><td>较薄，靠生态补</td><td>Power BI 语义模型为主</td></tr>
+    <tr><td class="rowlab"><b>政府/涉密</b></td><td>二十年资质与信任（Maven/NATO）</td><td>有限</td><td>有限</td><td>强（政府云）</td></tr>
+    <tr><td class="rowlab"><b>主要短板</b></td><td>贵、重、争议、估值透支</td><td>离「最后一步」远</td><td>离「决策」远</td><td>无人对结果负责</td></tr>
+  </table></div>
+
+  <p class="reveal"><b>生态位小结：</b>Palantir 不是「更好的数据平台」，而是占据了一个此前无人命名过的位置——<b>企业现实的受控接口</b>。数据基础设施的战争已经由别人打完（且它乐意租用战果），它守的是从「理解」到「行动」之间的那五百米。这五百米在 AI 之前无关紧要（反正走不到），在 Agent 时代成了必经之路。</p>
+</section>
+
+<!-- ══════════════ 06 第一性原理 ══════════════ -->
+<section class="ch" id="s6">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 06 / FIRST PRINCIPLES · 壁垒</div>
+    <h2>第一性原理拆解：它的壁垒到底是什么，不是什么</h2>
+    <div class="desc">把所有表层解释剥掉，从「企业为什么存在」推起。</div>
+  </div>
+
+  <h3 class="reveal"><span class="mono">06.1</span>从公理推起</h3>
+
+  <p class="reveal"><b>公理一：企业不是为了拥有数据而存在，是为了做出决策并行动而存在。</b>数据只是决策的燃料，决策才是价值发生的地方。<b>公理二：数据的价值只能在「被用于决策」的那一刻兑现</b>——存着的、看着的、汇报着的数据，价值为零。<b>推论一：</b>任何停留在「描述过去」环节的产品（ETL、数仓、报表），处在价值链的上游，天然面临被更便宜的层替代的压力——因为描述可以标准化，而标准化必然商品化。<b>推论二：</b>占据「决策→行动」最后一公里的玩家，占据了价值兑现的闸口。<b>推论三（最关键）：</b>「替组织行动」的授权本质上是<b>信任问题而非技术问题</b>——让软件写回生产系统、让 Agent 调用业务动作，靠的不是算法优越性，是权限体系、审计链条与组织信任。而信任只有一个生产函数：<b>时间 × 共同经历</b>。</p>
+
+  <div class="pull reveal">Palantir 的壁垒不是任何一项技术，而是一个结构性位置：它站在「价值兑现的最后一公里」，而通往这个位置的门票只能用时间买。<small>— 第一性原理结论</small></div>
+
+  <p class="reveal">这个推论直接回答了最常见的质疑：「本体技术上并不神秘，为什么没人抄？」——因为<b>壁垒从来不在「能不能造出来」，而在「凭什么被允许在场」</b>。让一家公司的订单、库存、病人或作战单元的写操作经过你的系统，需要：涉密资质与背景审查（政府线）、二十年无重大事故的记录（信任线）、驻场交付的组织能力（执行线）、以及最重要的——客户的世界模型已经在你的本体上运转（耦合线）。这四条没有一条可以用融资加速，全部只随时间线性增长。这就是为什么 Databricks 有三倍于它的收入和更豪华的技术声望，却拿不下 Maven 和 NATO。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 920 500" xmlns="http://www.w3.org/2000/svg">
+      <!-- 同心圆 五层 -->
+      <circle cx="330" cy="250" r="225" fill="rgba(95,179,179,.04)" stroke="#2d3749"/>
+      <circle cx="330" cy="250" r="178" fill="rgba(95,179,179,.06)" stroke="#2d3749"/>
+      <circle cx="330" cy="250" r="132" fill="rgba(95,179,179,.08)" stroke="#3a4658"/>
+      <circle cx="330" cy="250" r="88" fill="rgba(232,163,61,.10)" stroke="#e8a33d" stroke-opacity=".5"/>
+      <circle cx="330" cy="250" r="46" fill="rgba(232,163,61,.22)" stroke="#e8a33d" stroke-width="1.5"/>
+      <text x="330" y="240" text-anchor="middle" font-size="13.5" fill="#e8a33d" font-weight="700">本体资产</text>
+      <text x="330" y="260" text-anchor="middle" class="mono" font-size="8.5" fill="#c4beae">客户的世界模型</text>
+      <text x="330" y="274" text-anchor="middle" class="mono" font-size="8.5" fill="#c4beae">跑在生产上</text>
+      <!-- 层标签 右侧引出 -->
+      <g font-size="12.5" fill="#c4beae">
+        <line x1="376" y1="250" x2="560" y2="110" stroke="#3a4658"/><text x="572" y="108" fill="#e9e4d6" font-weight="600">② 切换成本</text><text x="572" y="128" fill="#8d8a7d" font-size="11.5">Action 已写回生产 · 日常运营长在</text><text x="572" y="146" fill="#8d8a7d" font-size="11.5">本体上 —— 换它 = 换神经系统</text>
+        <line x1="462" y1="250" x2="560" y2="200" stroke="#3a4658"/><text x="572" y="198" fill="#e9e4d6" font-weight="600">③ 安全合规资质</text><text x="572" y="218" fill="#8d8a7d" font-size="11.5">涉密网络 · 背景审查工程师</text><text x="572" y="236" fill="#8d8a7d" font-size="11.5">权限保真与全审计的肌肉记忆</text>
+        <line x1="508" y1="290" x2="560" y2="300" stroke="#3a4658"/><text x="572" y="298" fill="#e9e4d6" font-weight="600">④ FDE 组织能力</text><text x="572" y="318" fill="#8d8a7d" font-size="11.5">特种部队式交付 + 组件回填平台</text><text x="572" y="336" fill="#8d8a7d" font-size="11.5">的「重模式」纪律</text>
+        <line x1="500" y1="350" x2="560" y2="392" stroke="#3a4658"/><text x="572" y="390" fill="#e9e4d6" font-weight="600">⑤ 政企信任网络</text><text x="572" y="410" fill="#8d8a7d" font-size="11.5">Maven · NATO · NHS · 乌克兰的</text><text x="572" y="428" fill="#8d8a7d" font-size="11.5">案例复利与旋转门效应</text>
+        <text x="572" y="70" fill="#e9e4d6" font-weight="600">① 本体资产（核心）</text><text x="572" y="90" fill="#8d8a7d" font-size="11.5">对象/关系/动作模型 + 其上</text><text x="572" y="62" fill="none">.</text>
+      </g>
+      <text x="330" y="492" text-anchor="middle" class="mono" font-size="10" fill="#615f55">由内向外：越内层越「资产」，越外层越「资格」—— 资产难仿，资格难买</text>
+    </svg>
+    </div>
+    <figcaption><b>图 09 · 壁垒的五层同心圆。</b>注意方向性：外层（资质、信任网络）是「入场资格」，决定谁能玩；内层（本体资产、切换成本）是「存量资产」，决定谁走不了。竞品可以复制产品，无法复制资格；LLM 可以降低建模成本，无法搬走已建成的本体。</figcaption>
+  </figure>
+
+  <h3 class="reveal"><span class="mono">06.2</span>反方观点的正面回应（第一性原理的压力测试）</h3>
+
+  <ul class="pts reveal">
+    <li><b>「它没有技术壁垒」——对，但问错了问题。</b>单点技术上 Ontology 谁都能做（开源界有 OpenFGA、图数据库、各路语义层）。但把问题换成「一个新进入者要让波音或 NATO 的行动流经过自己的系统，需要什么」——答案是资质、驻场组织、审计记录和十年时间。审计四大会计师事务所没有技术壁垒，壁垒是制度性位置。Palantir 是软件界的同构体。</li>
+    <li><b>「LLM 会让本体建模变便宜，侵蚀它的核心工序」——部分成立，但打偏了要害。</b>模型确实在压缩第③步（本体建模）的人力成本，可建模从来不是壁垒的全部——<b>存量本体 + Action 通道 + 信任才是</b>。甚至可以论证：建模越便宜，越多组织敢于建设本体，而一旦建成，托管与行动通道的最佳供应商仍是占据位置的那家。工具的普及往往扩大平台的价值，就像公路越多，收费站越忙。</li>
+    <li><b>「太贵，客户会跑」——这是真实的风险敞口，但有对冲。</b>合同金额确实巨大，预算紧缩期最先被砍的传闻从未停过。对冲在于：一旦 Action 写回与日常运营耦合，Palantir 从「可砍的软件支出」变成「停不下来的运营依赖」——这既是客户抱怨的锁死，也是续费率的来源（财报披露的净美元留存长期在 110%+）。</li>
+    <li><b>「信任是双刃剑」——完全正确，这是最深的风险。</b>它的位置建立在「被允许在场」之上，一次严重的数据事故、一次政治风向的剧烈反转（尤其在欧洲或美国政权更替中），都可能动摇资格本身。壁垒与风险是同一枚硬币：深度耦合意味着深度暴露。</li>
+  </ul>
+</section>
+
+<!-- ══════════════ 07 横纵交汇 ══════════════ -->
+<section class="ch" id="s7">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 07 / SYNTHESIS · 交汇</div>
+    <h2>横纵交汇：一个「反潮流」的耐心，撞上了历史的转向</h2>
+    <div class="desc">把二十三年的时间线和今天的竞争格局叠在一起看，能得到三个判断。</div>
+  </div>
+
+  <p class="reveal"><b>判断一：Palantir 的历史本质是「同一笔资产的复利」。</b>纵向看，它二十年只做一件事——把数据变成决策；三次时代浪潮（反恐战争、企业数字化、生成式 AI）先后奖励了这同一件事。2008 年情报界需要连点成线，2016 年企业需要统一数据，2023 年大模型需要安全的世界接口——表面上是三次运气，底层上是同一笔资产（本体 + FDE + 信任）在不同利率环境下的重新定价。2023 年之后它的营收曲线斜率突变（下图），不是产品突变，是世界的贴现率变了。</p>
+
+  <figure class="fig reveal">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <!-- 轴 -->
+        <line x1="70" y1="260" x2="850" y2="260" stroke="#3a4658"/>
+        <line x1="70" y1="260" x2="70" y2="30" stroke="#3a4658"/>
+        <text x="62" y="36" text-anchor="end" class="mono" font-size="9" fill="#8d8a7d">$B</text>
+        <!-- bars: 1.09 1.54 1.91 2.23 2.87 3.7E -->
+        <g>
+          <rect x="100" y="184" width="72" height="76" fill="#31405a"/><text x="136" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2020</text><text x="136" y="176" text-anchor="middle" class="mono" font-size="10" fill="#c4beae">1.09</text>
+          <rect x="220" y="152" width="72" height="108" fill="#31405a"/><text x="256" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2021</text><text x="256" y="144" text-anchor="middle" class="mono" font-size="10" fill="#c4beae">1.54</text>
+          <rect x="340" y="127" width="72" height="133" fill="#31405a"/><text x="376" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2022</text><text x="376" y="119" text-anchor="middle" class="mono" font-size="10" fill="#c4beae">1.91</text>
+          <rect x="460" y="104" width="72" height="156" fill="#31405a"/><text x="496" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2023</text><text x="496" y="96" text-anchor="middle" class="mono" font-size="10" fill="#c4beae">2.23</text>
+          <rect x="580" y="60" width="72" height="200" fill="#8a6528"/><text x="616" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2024</text><text x="616" y="52" text-anchor="middle" class="mono" font-size="10" fill="#f5c66b">2.87</text>
+          <rect x="700" y="1.5" width="72" height="258" fill="#e8a33d"/><text x="736" y="284" text-anchor="middle" class="mono" font-size="10" fill="#8d8a7d">2025E</text><text x="736" y="16" text-anchor="middle" class="mono" font-size="10" fill="#f5c66b">~3.7</text>
+        </g>
+        <!-- 增速注释 -->
+        <text x="496" y="308" text-anchor="middle" class="mono" font-size="9" fill="#615f55">+17%（谷底）</text>
+        <text x="736" y="308" text-anchor="middle" class="mono" font-size="9" fill="#e8a33d">AIP 全年贡献 · 指引口径</text>
+        <text x="430" y="245" text-anchor="middle" font-size="11" fill="#615f55">增速一度跌至 17% 被华尔街判死 → Bootcamp 启动后重新加速至 +29% / +48%</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption><b>图 10 · 营收的「二次起飞」（数据来自历年年报；2025E 为公司指引口径的近似值）。</b>注意 2022–2023 的低增速区——同期正是股价跌去 87%、舆论判死的阶段，而 Apollo / Ontology SDK / 乌克兰部署都在此时完成。资本市场的叙事与资产的复利，出现了整整两年的时差。</figcaption>
+  </figure>
+
+  <p class="reveal"><b>判断二：横向的竞争终局，是「三层分工」而非一家通吃。</b>把图 08 和图 09 叠加可以推出未来的版图：数据基础设施层（Snowflake/Databricks/微软）继续商品化内卷，模型层（OpenAI/Anthropic/开源）持续降价普惠，而<b>本体与行动层</b>成为新的争夺高地。Palantir 领先这个高地大约一个身位，但真正决定胜负的不是它 vs Databricks，而是三个外生变量：（a）大模型能否可靠到让「轻量语义层 + Agent」绕过重本体——若如此，它的交付深度优势会被稀释；（b）政治与信任风险——它的资格是政府给的，也能被政治收回，欧洲市场的阻力是前哨；（c）估值本身——按几乎任何传统尺度，2025 年的股价已透支多年完美执行，任何一次大客户流失或安全事件都会被放大定价。乐观与危险在同一处：它已经重要到不能低调。</p>
+
+  <p class="reveal"><b>判断三（给研究者的元判断）：这家公司最大的「产品」，其实是它证明了的一条路线。</b>软件行业二十年的主流叙事是「轻、快、自助、平台化」，Palantir 反着做：重、慢、驻场、对结果负责——然后在 AI 时代，当所有人发现落地比模型难一百倍时，这条被嘲笑的路线突然成了唯一铺完的路。它的存在改变了行业的提问方式：数据项目的 KPI 不该是「接入了多少数据」，而是「改变了多少决策」。这个观念的胜利，可能比它的市值更持久。</p>
+</section>
+
+<!-- ══════════════ 08 职业启发 ══════════════ -->
+<section class="ch" id="s8">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 08 / FOR YOU · 职业启发</div>
+    <h2>对你职业发展的六条启发：做 FDE 型工程师，不做管道工</h2>
+    <div class="desc">把公司研究翻译成个人战略。假设读者是技术人（工程师 / 架构师 / 技术管理者）。</div>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 01</span>在自己领域里，做「本体建模者」，不做「接口实现者」</div>
+    <p>每个业务域都有自己的本体：支付域是<b>交易、订单、通道、商户、结算、对账</b>及其关系；物流域是仓、单、车、司机。大多数工程师在「表结构」层面工作，少数人在「领域模型」层面工作——后者决定前者的演化方向。Palantir 证明了：谁拥有领域模型的话语权，谁就拥有不可外包的位置。行动建议：把你所在业务的核心对象、关系、状态机画成一份显式的领域模型文档，并让它成为团队共识——这份「世界说明书」会比任何单个项目更长寿，它是你的个人本体资产。</p>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 02</span>把工作的终点从「交付」推到「决策被改变」</div>
+    <p>Palantir 最锋利的产品哲学是 decision-first：一个系统的价值不在它处理了多少数据，而在它改变了哪个决策、多快、多准。检视你手头的系统：它的下游是另一个系统，还是一个真实的决定？如果你做的是 dashboard，问一句「谁基于它做什么动作、这个动作能不能被产品化」；如果你做的是平台，问一句「离我最近的真实决策是什么，我能不能直接服务它」。离决策越近，越难被替代——离决策远的管道，正在被 LLM 快速商品化。</p>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 03</span>学 FDE 的「驻场心法」：上下文垄断是个人壁垒</div>
+    <p>FDE 模式的本质不是「派工程师去客户那」，而是<b>让工程师垄断业务的完整上下文</b>——既懂技术又懂现场，成为两个世界之间唯一的翻译官。个人职业同理：你的不可替代性 = 技术能力 × 对业务上下文的垄断程度。技术能力市场上供过于求，而「既懂这套支付通道的坑、又懂为什么业务这么要求」的人，一个团队往往只有一两个。刻意选择那些需要跨进业务现场的任务（排查线上问题、参与业务方评审、跟着运营值一天班），这些是攒上下文最便宜的时候。</p>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 04</span>用「速赢营」节奏做个人品牌：五天闭环胜过三个月方案</div>
+    <p>AIP Bootcamp 证明的销售学：与其写三个月的完美方案，不如五天做一个能感知的原型，让利益相关方「先看见」。个人工作里同样适用——推动任何跨团队的事（新工具、流程改进、技术迁移），先做最小可感知版本拿真实反馈，再谈推广。速赢建立的信任会让后续的每个请求都被加速，这是复利；而完美方案的宿命通常是评审会上被毙。</p>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 05</span>AI 时代重新定价你的技能：写代码贬值，grounding 升值</div>
+    <p>图 06 的公式对个人同样成立：<b>你的产出 = 判断力（LLM 也有） × 私有上下文（只有你有） × 责任承担（只有你能）</b>。代码生成正在让「实现」免费，这让三类东西升值：领域本体（知道系统里有什么对象、什么约束、什么坑）、决策上下文（知道现在该解决什么问题、为什么）、以及为结果签字的担当。策略上：把你脑子里的隐性经验持续外化成显式资产——领域模型、决策 SOP、故障手册、给 AI 用的上下文文档。未来最值钱的工程师，是给自己的 AI 供给高质量本体的人。</p>
+  </div>
+
+  <div class="career-card reveal">
+    <div class="t"><span class="mono">INSIGHT 06</span>选赛道时，用「最后一公里测试」</div>
+    <p>Palantir 的生态位分析给了一个通用的赛道评估法：问「这个位置离最终决策与行动有多远、被替代的难度有多大」。数据管道、通用中间件、纯报表——离决策远，商品化快；行业核心系统的领域层、决策算法落地、面向一线的闭环应用——离决策近，越用越厚。跳槽或选项目时，宁可去一个「小但离钱和决策近」的位置，不要去「大但只是链条一环」的位置。公司如此，个人亦然：Palantir 四五千人做着许多十万人公司的生意，因为它们站在价值兑现的那五百米。</p>
+  </div>
+
+  <div class="pull reveal">一份调研的最后，把 Palantir 压缩成一句对个人有用的话：<b>在所有人追逐工具的年代，它投资「对现实的建模」和「对结果的负责」——二十年后的某一天，世界突然开始为这两样东西付出溢价。</b><small>— 职业版本的结论：攒你的本体，守住你的最后一公里</small></div>
+</section>
+
+<!-- ══════════════ 09 信源 ══════════════ -->
+<section class="ch" id="s9">
+  <div class="sec-head reveal">
+    <div class="sec-no">SECTION 09 / SOURCES · 信源</div>
+    <h2>信源与说明</h2>
+  </div>
+  <div class="tbl-wrap reveal"><table>
+    <tr><th>类别</th><th>信源</th></tr>
+    <tr><td class="rowlab"><b>公司一手</b></td><td>Palantir 官方网站与产品文档（Foundry / Ontology / AIP 白皮书）、历季财报与电话会纪要、2020 年 S-1 上市文件、Apollo 技术博客</td></tr>
+    <tr><td class="rowlab"><b>人物叙述</b></td><td>Alex Karp《The Technological Republic》(2024) 及历年公开访谈；Peter Thiel《Zero to One》与访谈中对 PayPal 反欺诈起源的多次陈述；CTO Shyam Sankar 关于 FDE 模式的演讲</td></tr>
+    <tr><td class="rowlab"><b>媒体调查</b></td><td>NYT 对 Cambridge Analytica 事件的报道（2018-03）；彭博 / FT / The Information 对 FDE 模式与估值的多年跟踪；Defense One / Breaking Defense 对 DCGS-A 之争、Maven、TITAN、NATO 采购的报道（2012–2025）</td></tr>
+    <tr><td class="rowlab"><b>客户披露</b></td><td>bp CDO 公开演讲与案例；NHS Digital 新冠数据平台公开记录（2020 起）；空客、丰田北美的公开案例材料；乌克兰政府高层对 Foundry 战时使用的公开确认（2022 起）</td></tr>
+    <tr><td class="rowlab"><b>社区与前员工</b></td><td>前员工在 Quora / 个人博客 / 播客中对 Ontology 实施细节与 FDE 文化的第一人称还原；Glassdoor 评价样本</td></tr>
+    <tr><td class="rowlab"><b>技术概念</b></td><td>Tom Gruber, "A Translation Approach to Portable Ontology Specifications" (1993)；计算机科学本体论的标准定义</td></tr>
+  </table></div>
+
+  <div class="note reveal"><b>诚实性说明：</b>① 文中财务与合同数据截至 2025 年公开信息，2026 年的部分以叙事性判断为主，建议使用前按最新财报核验；② 竞品收入为各自财报/公告口径的近似值；③ 本报告为独立研究，与 Palantir Technologies 无任何关联；④「国内数据中台」一节的评述基于公开的行业复盘文章综合，不针对任何特定公司；⑤ 图表为概念示意（依据官方架构描述绘制），非官方架构图。研究方法：横纵分析法（纵向历时还原 + 横向共时对比）。</div>
+
+  <div class="endmark">— DOSSIER PLTR-2003 · 完 —<br>RESEARCH METHOD: 横纵分析法 · COMPILED 2026-08<br>DATA AS OF 2025 PUBLIC FILINGS · FOR PERSONAL GROWTH ONLY</div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  // 进度
+  var bar=document.getElementById('pbar'),pct=document.getElementById('rpct');
+  function onScroll(){
+    var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+    var r=max>0?Math.min(1,h.scrollTop/max):0;
+    bar.style.width=(r*100).toFixed(1)+'%';
+    pct.textContent=(r<10?'0':'')+Math.round(r*100)+'%';
+  }
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  // reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+  // toc 高亮
+  var links=[].slice.call(document.querySelectorAll('aside.toc a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))}).filter(Boolean);
+  var io2=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){l.classList.remove('on')});
+        var i=secs.indexOf(e.target);
+        if(i>-1){links[i].classList.add('on');
+          var m=document.getElementById('tocm');
+          if(m){var ma=m.children[i];if(ma){[].forEach.call(m.children,function(c){c.classList.remove('on')});ma.classList.add('on');}}
+        }
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  secs.forEach(function(s){io2.observe(s)});
+})();
+</script>
+</body>
+</html>
